@@ -17,7 +17,7 @@ function App() {
   const [currentStep, setCurrentStep] = useState(1);
 
   function handleStep() {
-    setCurrentStep((prev) => prev + 1);
+    setCurrentStep((prev) => prev + 2);
   }
 
   return (
