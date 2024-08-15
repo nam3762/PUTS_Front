@@ -4,8 +4,8 @@ import PrevNextButton from "../../components/PrevNextButton";
 export default function TimetableGenerator() {
   return (
     <div className="flex flex-1 items-center justify-center min-h-screen bg-base-200">
-      <form className="form-control p-6 bg-gray-600 shadow-lg rounded-lg w-1/2 mr-5">
-        <h2 className="text-2xl font-bold mb-4 text-left">
+      <form className="form-control p-6 bg-gray-100 shadow-lg rounded-lg w-1/2 mr-5">
+        <h2 className="text-2xl font-bold mb-4 text-left text-base-content">
           STEP 1: 시간표 정보
         </h2>
 
@@ -13,7 +13,7 @@ export default function TimetableGenerator() {
           <span className="label-text text-right text-xs text-green-500">
             모든 정보는 서버에 저장되며 언제든 불러올 수 있습니다.
           </span>
-          <span className="label-text text-stone-200">시간표 이름</span>
+          <span className="label-text text-base-content">시간표 이름</span>
           <label
             className="input input-bordered flex items-center gap-2 mt-2"
             htmlFor="TimetableName"
@@ -28,7 +28,7 @@ export default function TimetableGenerator() {
         </div>
         <div className="form-control mb-4">
           <div className="flex items-center">
-            <span className="label-text text-stone-200">비밀번호</span>
+            <span className="label-text text-base-content">비밀번호</span>
             <div
               className="tooltip ml-2"
               data-tip="시간표 생성 이후에 비밀번호를 이용하여 접근할 수 있습니다."
@@ -44,7 +44,7 @@ export default function TimetableGenerator() {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
               fill="currentColor"
-              className="h-4 w-4 opacity-70"
+              className="h-4 w-4 opacity-70 text-base-content"
             >
               <path
                 fillRule="evenodd"
@@ -58,12 +58,12 @@ export default function TimetableGenerator() {
 
         <div className="form-control mb-4">
           <label className="label" htmlFor="Description">
-            <span className="label-text text-stone-200">시간표 설명</span>
+            <span className="label-text text-base-content">시간표 설명</span>
           </label>
           <textarea
             id="Description"
             className="textarea textarea-bordered w-full"
-            placeholder="추가할 설명을 적어주세요."
+            placeholder="시간표 설명을 적어주세요."
           ></textarea>
         </div>
 

@@ -1,5 +1,4 @@
-import { useState, useContext } from "react";
-import { FormContext } from "../../context/FormContext";
+import { useState } from "react";
 import PrevNextButton from "../../components/PrevNextButton";
 
 const weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일"];
@@ -93,24 +92,26 @@ export default function Professors() {
 
   return (
     <div className="flex flex-1 items-center justify-center min-h-screen bg-base-200">
-      <form className="form-control p-6 bg-gray-600 shadow-lg rounded-lg w-full my-5 mr-5">
-        <h2 className="text-2xl font-bold mb-4 text-left">STEP 2: 교수 정보</h2>
+      <form className="form-control p-6 bg-base-100 shadow-lg rounded w-full my-5 mr-5">
+        <h2 className="text-2xl font-bold mb-4 text-left text-base-content">
+          STEP 2: 교수 정보
+        </h2>
         {professors.map((professor, index) => (
           <div
             key={index}
-            className="mb-6 p-4 rounded-lg border-2 border-gray-300"
+            className="mb-6 p-4 rounded border-2 border-base-300"
           >
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="flex flex-row justify-between items-center col-span-2 max-w-max">
-                <kbd className="kbd kbd-sm min-w-24 font-sans font-semibold bg-yellow-300 text-base-300 max-h-1">
+                <kbd className="kbd kbd-sm min-w-24 font-sans font-semibold bg-base-content text-base-100 max-h-1">
                   {index + 1}번 교수
                 </kbd>
-                <div className="form-controlrounded-lg min-w-40">
+                <div className="form-control rounded min-w-40">
                   <label className="label cursor-pointer">
-                    <span className="label-text text-warning font-bold px-4">
+                    <span className="label-text text-base-content font-bold px-4">
                       강사 여부 체크
                     </span>
-                    <input type="checkbox" className="toggle toggle-warning" />
+                    <input type="checkbox" className="toggle" />
                   </label>
                 </div>
               </div>
@@ -121,7 +122,7 @@ export default function Professors() {
                 value={professor.professorName}
                 onChange={(e) => handleProfessorChange(index, e)}
                 placeholder="교수 이름 (ex: 남재홍)"
-                className="input input-bordered flex items-center w-full"
+                className="input input-bordered flex items-center w-full text-base-content"
               />
               <input
                 type="text"
@@ -130,14 +131,14 @@ export default function Professors() {
                 value={professor.professorCode}
                 onChange={(e) => handleProfessorChange(index, e)}
                 placeholder="교수 코드 (ex: P-001)"
-                className="input input-bordered flex items-center w-full"
+                className="input input-bordered flex items-center w-full text-base-content"
               />
             </div>
 
             <div className="flex">
               <div className="w-1/2 flex justify-center">
                 <details className="dropdown mb-4 text-center">
-                  <summary className="btn btn-error text-white mb-4 min-w-40">
+                  <summary className="btn btn-primary text-base-100 mb-4 min-w-40">
                     강의 불가능한 시간 설정
                   </summary>
                   <div className="grid grid-cols-5 gap-4">
@@ -156,7 +157,9 @@ export default function Professors() {
                             }
                             className="checkbox mr-2"
                           />
-                          <span className="font-semibold">{day}</span>
+                          <span className="font-semibold text-base-content">
+                            {day}
+                          </span>
                         </div>
                         {periodLabels.map((period, periodIndex) => (
                           <div
@@ -169,7 +172,7 @@ export default function Professors() {
                                   professor.offTimes.some(
                                     (t) => t.day === day && t.period === period
                                   )
-                                    ? "bg-red-500 text-base-100"
+                                    ? "bg-error text-base-100"
                                     : "bg-base-100"
                                 }`}
                           >
@@ -183,7 +186,7 @@ export default function Professors() {
               </div>
               <div className="w-1/2 pl-2 flex justify-center">
                 <details className="dropdown mb-4 text-center">
-                  <summary className="btn btn-success text-white mb-4 min-w-40">
+                  <summary className="btn btn-primary text-base-100 mb-4 min-w-40">
                     선호 시간 설정
                   </summary>
                   <div className="grid grid-cols-5 gap-4">
@@ -202,7 +205,9 @@ export default function Professors() {
                             }
                             className="checkbox mr-2"
                           />
-                          <span className="font-semibold">{day}</span>
+                          <span className="font-semibold text-base-content">
+                            {day}
+                          </span>
                         </div>
                         {periodLabels.map((period, periodIndex) => (
                           <div
@@ -215,7 +220,7 @@ export default function Professors() {
                                   professor.hopeTimes.some(
                                     (t) => t.day === day && t.period === period
                                   )
-                                    ? "bg-green-500 text-base-100"
+                                    ? "bg-success text-base-100"
                                     : "bg-base-100"
                                 }`}
                           >
@@ -231,7 +236,7 @@ export default function Professors() {
             {professors.length > 1 && (
               <button
                 onClick={(event) => removeProfessor(event, index)}
-                className="btn bg-gray-300 hover:bg-base-300 text-base-300 hover:text-gray-300 py-2 px-4 mb-4 max-w-28"
+                className="btn py-2 px-4 mb-4 max-w-28"
               >
                 교수 삭제
               </button>
@@ -239,7 +244,7 @@ export default function Professors() {
           </div>
         ))}
 
-        <button onClick={addProfessor} className="btn btn-accent mb-4 max-w-28">
+        <button onClick={addProfessor} className="btn mb-4 max-w-28">
           교수 추가
         </button>
         {/* Submit Button */}

@@ -1,8 +1,18 @@
 import { useState } from "react";
 import ErrorAlert from "../alerts/ErrorAlert";
 import { Link } from "react-router-dom";
+import { useStepState } from "../context/StepContext";
+import ThemeToggle from "../themes/ThemeToggle";
 
 const Navbar = () => {
+  const { currentStep, setCurrentStep } = useStepState();
+
+  console.log(currentStep);
+
+  function handleStep() {
+    setCurrentStep(0);
+  }
+
   const [isErrored, setIsErrored] = useState(false);
 
   function handleError() {
@@ -10,10 +20,14 @@ const Navbar = () => {
   }
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-300">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle text-base-content"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -40,12 +54,19 @@ const Navbar = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <Link to="/" className="btn btn-ghost text-2xl">
+        <Link
+          to="/"
+          className="btn btn-ghost text-2xl text-base-content"
+          onClick={handleStep}
+        >
           PUTS
         </Link>
       </div>
       <div className="navbar-end">
-        <button className="btn btn-ghost btn-circle" onClick={handleError}>
+        <div className="flex justify-center items-center h-5 w-5 mr-4">
+          <ThemeToggle />
+        </div>
+        <button className="btn btn-ghost btn-circle text-base-content">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -61,7 +82,7 @@ const Navbar = () => {
             />
           </svg>
         </button>
-        <button className="btn btn-ghost btn-circle">
+        <button className="btn btn-ghost btn-circle text-base-content">
           <div className="indicator">
             <svg
               xmlns="http://www.w3.org/2000/svg"
