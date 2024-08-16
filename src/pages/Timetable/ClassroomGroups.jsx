@@ -1,12 +1,12 @@
 import { useState } from "react";
-import PrevNextButton from "../../components/PrevNextButton";
+import Form from "../../components/form/Form";
 
 export default function ClassroomGroups() {
   const classroomGroups = [
-    { id: 1, groupName: "이론", classrooms: ["S4-1-101"] },
-    { id: 2, groupName: "실습", classrooms: ["S4-1-201"] },
-    { id: 3, groupName: "대형", classrooms: ["E8-7-101"] },
-    { id: 4, groupName: "기타", classrooms: ["S4-1-301"] },
+    { id: 1, groupName: "이론", classrooms: [] },
+    { id: 2, groupName: "실습", classrooms: [] },
+    { id: 3, groupName: "대형", classrooms: [] },
+    { id: 4, groupName: "기타", classrooms: [] },
   ];
 
   const classrooms = [
@@ -76,93 +76,106 @@ export default function ClassroomGroups() {
 
   function handleClassroomChange(groupIndex, classroomId, isChecked) {
     setSelectedClassrooms((prev) => {
-      const updatedSelected = [...prev];
+      let updatedSelected = [...prev];
       if (isChecked) {
-        updatedSelected.push(classroomId);
+        // 해당 그룹에서 선택된 경우, 다른 그룹의 선택을 모두 제거
+        updatedSelected = updatedSelected.filter(
+          (item) => item.classroomId !== classroomId
+        );
+        // 해당 그룹에 추가
+        updatedSelected.push({ groupIndex, classroomId });
       } else {
-        const index = updatedSelected.indexOf(classroomId);
-        if (index > -1) {
-          updatedSelected.splice(index, 1);
-        }
+        // 선택한 그룹에서 제거
+        updatedSelected = updatedSelected.filter(
+          (item) => item.classroomId !== classroomId
+        );
       }
       return updatedSelected;
     });
   }
 
-  // 선택된 상태를 관리하는 배열(selectedClassrooms)안에 클릭한 classroomId가 존재하는지 확인하는 함수
-  const isClassroomDisabled = (classroomId) => {
-    return selectedClassrooms.includes(classroomId);
+  const getClassroomState = (groupIndex, classroomId) => {
+    const isCheckedInGroup = selectedClassrooms.some(
+      (item) =>
+        item.classroomId === classroomId && item.groupIndex === groupIndex
+    );
+    const isSelectedInOtherGroups = selectedClassrooms.some(
+      (item) =>
+        item.classroomId === classroomId && item.groupIndex !== groupIndex
+    );
+
+    return { isCheckedInGroup, isSelectedInOtherGroups };
   };
 
   return (
-    <div className="flex flex-1 items-center justify-center min-h-screen bg-base-200">
-      <form className="form-control p-6 bg-gray-600 shadow-lg rounded-lg my-5 mr-5">
-        <h2 className="text-2xl font-bold mb-4 text-left">
-          STEP 4: 강의실 그룹 정보
-        </h2>
-        {classroomGroups.map((group, groupIndex) => (
-          <div
-            key={group.id}
-            tabIndex={0}
-            className="collapse collapse-arrow mb-6 p-4 rounded-lg border-2 border-gray-300"
+    <Form
+      title="STEP 4: 강의실 그룹 정보"
+      prev="/timetable/classrooms"
+      next="/timetable/lectures"
+    >
+      {classroomGroups.map((group, groupIndex) => (
+        <div
+          key={group.id}
+          tabIndex={0}
+          className="collapse collapse-arrow mb-6 p-4 rounded border-2 border-base-300"
+        >
+          <input
+            type="checkbox"
+            id={`accordion-${group.id}`}
+            className="peer appearance-none absolute"
+          />
+          <label
+            htmlFor={`accordion-${group.id}`}
+            className="collapse-title col-span-2 btn bg-base-content text-base-200 rounded font-sans font-bold cursor-pointer"
           >
-            <input
-              type="checkbox"
-              id={`accordion-${group.id}`}
-              className="peer appearance-none absolute"
-            />
-            <label
-              htmlFor={`accordion-${group.id}`}
-              className="collapse-title kbd kbd-sm col-span-2 font-sans font-semibold bg-yellow-300 text-base-300 cursor-pointer"
-            >
-              {group.groupName} 강의실
-            </label>
-            <div className="collapse-content px-0 peer-checked:block">
-              <div className="grid grid-cols-2 gap-4 mb-4"></div>
-              <div className="form-control grid grid-cols-4 gap-x-12">
-                {classrooms.map((classroom) => {
-                  // Classroom Id 선언 (ex: S4-1-101) 건물명+강의실번호
-                  const classroomId = `${classroom.buildingName}-${classroom.classroomNumber}`;
+            {group.groupName} 강의실
+          </label>
+          <div className="collapse-content px-0 peer-checked:block">
+            <div className="form-control grid grid-cols-6 gap-x-20 mt-4">
+              {classrooms.map((classroom) => {
+                // Classroom Id 선언 (ex: S4-1-101) 건물명+강의실번호
+                const classroomId = `${classroom.buildingName}-${classroom.classroomNumber}`;
+                const { isCheckedInGroup, isSelectedInOtherGroups } =
+                  getClassroomState(groupIndex, classroomId);
 
-                  // 강의실 Id가 그룹 내에 포함되어있는지 확인
-                  const isChecked = group.classrooms.includes(classroomId);
-
-                  // 강의실이 선택됐거나 그룹 내 포함이 안 되어있으면
-                  // 선택되면 true, 그룹 내 포함 안되면 true
-                  const isDisabled =
-                    isClassroomDisabled(classroomId) && !isChecked;
-
-                  return (
-                    <label key={classroomId} className="cursor-pointer label">
-                      <input
-                        type="checkbox"
-                        className={`checkbox checkbox-success checkbox-xs m-2 ${
-                          isDisabled ? "checkbox-error" : ""
-                        }`}
-                        checked={isChecked}
-                        onChange={(e) =>
-                          handleClassroomChange(
-                            groupIndex,
-                            classroomId,
-                            e.target.checked
-                          )
-                        }
-                      />
-                      <span className="label-text text-sm">
-                        {classroom.buildingName}-{classroom.classroomNumber}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
+                return (
+                  <label key={classroomId} className="cursor-pointer label">
+                    <input
+                      type="checkbox"
+                      className={`checkbox checkbox-xs m-2 ${
+                        isCheckedInGroup
+                          ? "checkbox-success" // 해당 그룹에서 선택된 경우 초록색
+                          : isSelectedInOtherGroups
+                          ? "checkbox-error" // 다른 그룹에서 선택된 경우 빨간색
+                          : "checkbox-neutral" // 선택되지 않은 경우 기본 색상
+                      }`}
+                      checked={isCheckedInGroup}
+                      onChange={(e) =>
+                        handleClassroomChange(
+                          groupIndex,
+                          classroomId,
+                          e.target.checked
+                        )
+                      }
+                    />
+                    <span
+                      className={`label-text text-sm ${
+                        isCheckedInGroup
+                          ? "text-success"
+                          : isSelectedInOtherGroups
+                          ? "text-error"
+                          : ""
+                      }`}
+                    >
+                      {classroom.buildingName}-{classroom.classroomNumber}
+                    </span>
+                  </label>
+                );
+              })}
             </div>
           </div>
-        ))}
-        <PrevNextButton
-          prev="/timetable/classrooms"
-          next="/timetable/lectures"
-        />
-      </form>
-    </div>
+        </div>
+      ))}
+    </Form>
   );
 }

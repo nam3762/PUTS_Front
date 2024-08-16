@@ -1,13 +1,13 @@
 export default function Footer() {
   return (
-    <footer className="footer footer-center bg-gradient-to-b from-base-200 to-base-100 text-base-content rounded p-10">
-      <nav className="grid grid-flow-col gap-4">
+    <footer className="footer footer-center bg-gradient-to-b from-base-200 to-base-100 text-base-content rounded p-10 pt-20">
+      <nav className="grid grid-flow-col gap-6">
         <a className="link link-hover">About us</a>
         <a className="link link-hover">Contact</a>
         <a className="link link-hover">Jobs</a>
       </nav>
       <nav>
-        <div className="grid grid-flow-col gap-4">
+        <div className="grid grid-flow-col gap-6">
           <a>
             <svg
               xmlns="http://www.w3.org/2000/svg"

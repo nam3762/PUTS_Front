@@ -24,17 +24,17 @@ export default function PrevNextButton({ prev, next }) {
     <div className="flex justify-between mt-4">
       <button
         type="button"
-        className="btn btn-neutral"
+        className="btn btn-primary"
         onClick={handlePrevClick}
-        disabled={currentStep === 0}
+        // disabled={currentStep === 0}
       >
         이전
       </button>
       <button
         type="button"
-        className="btn btn-neutral"
+        className="btn btn-primary"
         onClick={handleNextClick}
-        disabled={currentStep === 8}
+        // disabled={currentStep === 8}
       >
         다음
       </button>

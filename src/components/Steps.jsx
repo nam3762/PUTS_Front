@@ -5,12 +5,12 @@ export default function Steps() {
 
   return (
     <div className="m-10 min-w-32">
-      <ul className="steps steps-vertical text-base-content">
+      <ul className="steps steps-vertical text-base-content font-bold">
         <li className={`step ${currentStep >= 1 ? "step-primary" : ""}`}>
           시간표 정보
         </li>
         <li className={`step ${currentStep >= 2 ? "step-primary" : ""}`}>
-          교수
+          전임교원
         </li>
         <li className={`step ${currentStep >= 3 ? "step-primary" : ""}`}>
           강의실

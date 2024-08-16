@@ -19,7 +19,7 @@ function App() {
       <StepProvider>
         <main className="flex items-center flex-col min-h-screen w-full font-sans">
           <Navbar />
-          <div className="flex w-full flex-row bg-base-200">
+          <div className="flex flex-row w-full bg-base-200">
             <Steps />
             <HorizontalDivider />
             <Routes>
