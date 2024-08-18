@@ -30,13 +30,15 @@ export default function TimeSelector({
                 <div
                   key={periodIndex}
                   onClick={() => onToggleCell(index, timeType, day, period)}
-                  className={`btn bg-base-100 w-full h-12 flex items-center justify-center cursor-pointer hover:bg-${
-                    timeType === "offTimes" ? "error" : "success"
+                  className={`btn bg-base-100 w-full h-12 flex items-center justify-center cursor-pointer ${
+                    timeType === "offTimes"
+                      ? "hover:bg-error"
+                      : "hover:bg-success"
                   } my-1 ${
                     professor[timeType].some(
                       (t) => t.day === day && t.period === period
                     )
-                      ? `bg-${timeType === "offTimes" ? "error" : "success"}`
+                      ? `${timeType === "offTimes" ? "bg-error" : "bg-success"}`
                       : "bg-base-100"
                   }`}
                 >

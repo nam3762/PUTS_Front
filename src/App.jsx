@@ -12,6 +12,7 @@ import Classrooms from "./pages/Timetable/Classrooms";
 import ClassroomGroups from "./pages/Timetable/ClassroomGroups";
 import Lectures from "./pages/Timetable/Lectures";
 import PostgraduateLectures from "./pages/Timetable/PostgraduateLectures";
+import AutoScroll from "./components/AutoScroll";
 
 function App() {
   return (
@@ -24,23 +25,59 @@ function App() {
             <HorizontalDivider />
             <Routes>
               <Route path="/" element={<Mainpage />}></Route>
-              <Route path="/timetable" element={<TimetableGenerator />}></Route>
+              <Route
+                path="/timetable"
+                element={
+                  <>
+                    <AutoScroll />
+                    <TimetableGenerator />
+                  </>
+                }
+              ></Route>
               <Route
                 path="/timetable/professors"
-                element={<Professors />}
+                element={
+                  <>
+                    <AutoScroll />
+                    <Professors />
+                  </>
+                }
               ></Route>
               <Route
                 path="/timetable/classrooms"
-                element={<Classrooms />}
+                element={
+                  <>
+                    <AutoScroll />
+                    <Classrooms />
+                  </>
+                }
               ></Route>
               <Route
                 path="/timetable/classroomgroups"
-                element={<ClassroomGroups />}
+                element={
+                  <>
+                    <AutoScroll />
+                    <ClassroomGroups />
+                  </>
+                }
               ></Route>
-              <Route path="/timetable/lectures" element={<Lectures />}></Route>
+              <Route
+                path="/timetable/lectures"
+                element={
+                  <>
+                    <AutoScroll />
+                    <Lectures />
+                  </>
+                }
+              ></Route>
               <Route
                 path="/timetable/postgraduatelectures"
-                element={<PostgraduateLectures />}
+                element={
+                  <>
+                    <AutoScroll />
+                    <PostgraduateLectures />
+                  </>
+                }
               ></Route>
             </Routes>
           </div>

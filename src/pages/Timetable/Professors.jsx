@@ -9,7 +9,7 @@ import InputText from "../../components/form/InputText";
 const weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일"];
 const periodLabels = Array.from({ length: 9 }, (_, i) => `${i + 1}교시`);
 
-// STEP 2: 교수 정보 입력
+// STEP 2: 전임교원 정보 입력
 export default function Professors() {
   const [professors, setProfessors] = useState([
     {
@@ -90,7 +90,6 @@ export default function Professors() {
   const removeProfessor = (event, index) => {
     event.preventDefault();
     setProfessors((prevProfessors) => {
-      // Filter out the professor at the given index
       return prevProfessors.filter((_, i) => i !== index);
     });
   };
@@ -104,23 +103,33 @@ export default function Professors() {
       {professors.map((professor, index) => (
         <div key={index} className="mb-4 p-4 rounded border-2 border-base-300">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex flex-row justify-between items-center col-span-2 max-w-max">
-              <Kbd>{index + 1}번 교수</Kbd>
+            <div className="flex flex-row justify-between items-center col-span-1 max-w-max">
+              <Kbd>{index + 1}번 전임교원</Kbd>
               <Toggle>강사 여부 체크</Toggle>
+            </div>
+            <div className="text-right">
+              {professors.length > 1 && (
+                <Button
+                  onClick={(event) => removeProfessor(event, index)}
+                  style="btn-error btn-sm mb-0"
+                >
+                  전임교원 삭제
+                </Button>
+              )}
             </div>
             <InputText
               index={index}
               name="professorName"
               onChange={(e) => handleProfessorChange(index, e)}
             >
-              교수 이름 (ex: 남재홍)
+              전임교원 이름 (ex: 남재홍)
             </InputText>
             <InputText
               index={index}
               name="professorCode"
               onChange={(e) => handleProfessorChange(index, e)}
             >
-              교수 코드 (ex: P-001)
+              전임교원 코드 (ex: P-001)
             </InputText>
           </div>
 
@@ -146,18 +155,10 @@ export default function Professors() {
               onToggleAllDay={onToggleAllDay}
             />
           </div>
-          {professors.length > 1 && (
-            <Button
-              onClick={(event) => removeProfessor(event, index)}
-              style="error"
-            >
-              교수 삭제
-            </Button>
-          )}
         </div>
       ))}
-      <Button onClick={addProfessor} style="">
-        교수 추가
+      <Button onClick={addProfessor} style="max-w-32">
+        전임교원 추가
       </Button>
     </Form>
   );

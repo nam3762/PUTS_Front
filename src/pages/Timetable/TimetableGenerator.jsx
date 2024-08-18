@@ -1,5 +1,6 @@
 import Form from "../../components/form/Form";
 import InputText from "../../components/form/InputText";
+import Tooltip from "../../components/Tooltip";
 
 // 사용자 입력 첫 화면 (STEP 1: 시간표 정보 입력)
 export default function TimetableGenerator() {
@@ -14,6 +15,9 @@ export default function TimetableGenerator() {
         <span className="my-2 label-text text-right text-xs text-green-500 font-bold">
           모든 정보는 서버에 저장되며 언제든 불러올 수 있습니다.
         </span>
+        <span className="mb-2 label-text text-right text-xs text-base-content font-bold">
+          전체 화면에서 입력을 권장합니다.
+        </span>
         <span className="label-text text-base-content font-bold">
           시간표 이름
         </span>
@@ -24,12 +28,9 @@ export default function TimetableGenerator() {
           <span className="label-text text-base-content font-bold">
             비밀번호
           </span>
-          <div
-            className="tooltip ml-2"
-            data-tip="시간표 생성 이후에 비밀번호를 이용하여 접근할 수 있습니다."
-          >
-            <span className="btn btn-xs btn-circle text-sm h-5 w-5">?</span>
-          </div>
+          <Tooltip>
+            시간표 생성 이후에 비밀번호를 이용하여 접근할 수 있습니다.
+          </Tooltip>
         </div>
         <label
           className="input input-bordered text-base-content flex items-center gap-2 mt-2"
