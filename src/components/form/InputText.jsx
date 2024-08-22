@@ -1,9 +1,14 @@
-// 기본적으로 input text를 위해 만든 컴포넌트
+import { forwardRef } from "react";
 
-export default function InputText({ index, name, onChange, children }) {
+// 기본적으로 input text를 위해 만든 컴포넌트
+// React hook form 사용을 위해 ref를 받아야해서 forwardRef 사용함
+const InputText = forwardRef(function (
+  { index, name, onChange, children, style },
+  ref
+) {
   return (
     <label
-      className="input input-bordered text-base-content flex items-center gap-2 mt-2"
+      className={`input input-bordered text-base-content flex items-center gap-2 mt-2 ${style}`}
       htmlFor={name}
     >
       <input
@@ -13,7 +18,10 @@ export default function InputText({ index, name, onChange, children }) {
         onChange={onChange}
         placeholder={children}
         className="grow"
+        ref={ref}
       />
     </label>
   );
-}
+});
+
+export default InputText;

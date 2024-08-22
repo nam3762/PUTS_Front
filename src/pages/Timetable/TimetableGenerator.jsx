@@ -1,9 +1,15 @@
 import Form from "../../components/form/Form";
 import InputText from "../../components/form/InputText";
 import Tooltip from "../../components/Tooltip";
+import { useFormContext } from "react-hook-form";
 
 // 사용자 입력 첫 화면 (STEP 1: 시간표 정보 입력)
 export default function TimetableGenerator() {
+  const { register, getValues } = useFormContext();
+  // console.log(getValues("timetableName"));
+  // console.log(getValues("timetableDescription"));
+  // console.log(getValues("password"));
+
   return (
     <Form
       title="
@@ -21,7 +27,10 @@ export default function TimetableGenerator() {
         <span className="label-text text-base-content font-bold">
           시간표 이름
         </span>
-        <InputText name="timetableName"></InputText>
+        <InputText
+          name="timetableName"
+          {...register("timetableName")}
+        ></InputText>
       </div>
       <div className="form-control mb-4">
         <div className="flex items-center">
@@ -29,7 +38,8 @@ export default function TimetableGenerator() {
             비밀번호
           </span>
           <Tooltip>
-            시간표 생성 이후에 비밀번호를 이용하여 접근할 수 있습니다.
+            {`시간표 생성 이후에 비밀번호를 이용하여
+            시간표에 접근할 수 있습니다.`}
           </Tooltip>
         </div>
         <label
@@ -48,7 +58,12 @@ export default function TimetableGenerator() {
               clipRule="evenodd"
             />
           </svg>
-          <input type="password" id="password" className="grow" />
+          <input
+            type="password"
+            id="password"
+            className="grow"
+            {...register("password")}
+          />
         </label>
       </div>
       <div className="form-control mb-4">
@@ -58,9 +73,10 @@ export default function TimetableGenerator() {
           </span>
         </label>
         <textarea
-          id="Description"
+          id="timetableDescription"
           className="textarea textarea-bordered text-base-content w-full"
           placeholder="시간표 설명을 적어주세요."
+          {...register("timetableDescription")}
         ></textarea>
       </div>
     </Form>

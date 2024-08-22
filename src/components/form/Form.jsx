@@ -5,7 +5,7 @@ export default function Form({ title, prev, next, children }) {
   return (
     <div className="flex flex-1 justify-center bg-base-200 min-h-screen">
       <form className="form-control p-6 bg-base-100 shadow-lg rounded w-full my-6 mr-6 flex flex-col">
-        <h2 className="text-2xl font-bold mb-4 text-left text-base-content">
+        <h2 className="text-2xl font-bold mb-6 text-left text-base-content">
           {title}
         </h2>
         {children}

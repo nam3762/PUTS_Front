@@ -3,10 +3,10 @@ import Form from "../../components/form/Form";
 
 export default function ClassroomGroups() {
   const classroomGroups = [
-    { id: 1, groupName: "이론", classrooms: [] },
-    { id: 2, groupName: "실습", classrooms: [] },
-    { id: 3, groupName: "대형", classrooms: [] },
-    { id: 4, groupName: "기타", classrooms: [] },
+    { groupId: 1, groupName: "이론", classrooms: [] },
+    { groupId: 2, groupName: "실습", classrooms: [] },
+    { groupId: 3, groupName: "대형", classrooms: [] },
+    { groupId: 4, groupName: "기타", classrooms: [] },
   ];
 
   const classrooms = [
@@ -115,17 +115,17 @@ export default function ClassroomGroups() {
     >
       {classroomGroups.map((group, groupIndex) => (
         <div
-          key={group.id}
+          key={group.groupId}
           tabIndex={0}
           className="collapse collapse-arrow mb-6 p-4 rounded border-2 border-base-300"
         >
           <input
             type="checkbox"
-            id={`accordion-${group.id}`}
+            id={`accordion-${group.groupId}`}
             className="peer appearance-none absolute"
           />
           <label
-            htmlFor={`accordion-${group.id}`}
+            htmlFor={`accordion-${group.groupId}`}
             className="collapse-title col-span-2 btn bg-base-content text-base-200 rounded font-sans font-bold cursor-pointer"
           >
             {group.groupName} 강의실

@@ -1,96 +1,32 @@
-import { useState } from "react";
 import Form from "../../components/form/Form";
 import Button from "../../components/Button";
 import Toggle from "../../components/Toggle";
 import Kbd from "../../components/Kbd";
 import TimeSelector from "../../components/TimeSelector";
 import InputText from "../../components/form/InputText";
+import { useFormContext, useFieldArray, Controller } from "react-hook-form";
 
 const weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일"];
 const periodLabels = Array.from({ length: 9 }, (_, i) => `${i + 1}교시`);
 
 // STEP 2: 전임교원 정보 입력
 export default function Professors() {
-  const [professors, setProfessors] = useState([
-    {
+  const { control, register, getValues } = useFormContext();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "professors",
+  });
+
+  const currentProfessors = getValues("professors");
+  console.log(currentProfessors);
+
+  const handleAddProfessor = () => {
+    append({
       professorName: "",
       professorCode: "",
       isProfessor: true,
       offTimes: [],
       hopeTimes: [],
-    },
-  ]);
-
-  const handleProfessorChange = (index, event) => {
-    const { name, value, checked, type } = event.target;
-    setProfessors((prevProfessors) => {
-      const newProfessors = [...prevProfessors];
-      if (type === "checkbox") {
-        newProfessors[index][name] = checked;
-      } else {
-        newProfessors[index][name] = value;
-      }
-      return newProfessors;
-    });
-  };
-
-  const onToggleCell = (index, timeType, day, period) => {
-    const newProfessors = [...professors];
-    const currentTimes = newProfessors[index][timeType];
-    const time = { day, period };
-
-    if (currentTimes.some((t) => t.day === day && t.period === period)) {
-      newProfessors[index][timeType] = currentTimes.filter(
-        (t) => !(t.day === day && t.period === period)
-      );
-    } else {
-      newProfessors[index][timeType] = [...currentTimes, time];
-    }
-
-    setProfessors(newProfessors);
-  };
-
-  const onToggleAllDay = (index, timeType, day, checked) => {
-    setProfessors((prevProfessors) => {
-      const newProfessors = [...prevProfessors];
-      if (checked) {
-        periodLabels.forEach((period) => {
-          const time = { day, period };
-          if (
-            !newProfessors[index][timeType].some(
-              (t) => t.day === day && t.period === period
-            )
-          ) {
-            newProfessors[index][timeType].push(time);
-          }
-        });
-      } else {
-        newProfessors[index][timeType] = newProfessors[index][timeType].filter(
-          (t) => t.day !== day
-        );
-      }
-      return newProfessors;
-    });
-  };
-
-  const addProfessor = (event) => {
-    event.preventDefault();
-    setProfessors((prevProfessors) => [
-      ...prevProfessors,
-      {
-        professorName: "",
-        professorCode: "",
-        isProfessor: true,
-        offTimes: [],
-        hopeTimes: [],
-      },
-    ]);
-  };
-
-  const removeProfessor = (event, index) => {
-    event.preventDefault();
-    setProfessors((prevProfessors) => {
-      return prevProfessors.filter((_, i) => i !== index);
     });
   };
 
@@ -100,17 +36,28 @@ export default function Professors() {
       prev="/timetable"
       next="/timetable/classrooms"
     >
-      {professors.map((professor, index) => (
-        <div key={index} className="mb-4 p-4 rounded border-2 border-base-300">
+      {fields.map((professor, index) => (
+        <div
+          key={professor.id}
+          className="mb-4 p-4 rounded border-2 border-base-300"
+        >
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex flex-row justify-between items-center col-span-1 max-w-max">
               <Kbd>{index + 1}번 전임교원</Kbd>
-              <Toggle>강사 여부 체크</Toggle>
+              <Controller
+                control={control}
+                name={`professors.${index}.isProfessor`}
+                render={({ field }) => (
+                  <Toggle checked={field.value} onChange={field.onChange}>
+                    교수 여부 체크
+                  </Toggle>
+                )}
+              />
             </div>
-            <div className="text-right">
-              {professors.length > 1 && (
+            <div className="flex justify-end">
+              {fields.length > 1 && (
                 <Button
-                  onClick={(event) => removeProfessor(event, index)}
+                  onClick={() => remove(index)}
                   style="btn-error btn-sm mb-0"
                 >
                   전임교원 삭제
@@ -120,44 +67,56 @@ export default function Professors() {
             <InputText
               index={index}
               name="professorName"
-              onChange={(e) => handleProfessorChange(index, e)}
+              {...register(`professors.${index}.professorName`)}
             >
               전임교원 이름 (ex: 남재홍)
             </InputText>
             <InputText
               index={index}
               name="professorCode"
-              onChange={(e) => handleProfessorChange(index, e)}
+              {...register(`professors.${index}.professorCode`)}
             >
-              전임교원 코드 (ex: P-001)
+              전임교원 번호 (ex: P-001)
             </InputText>
           </div>
 
           <div className="flex">
-            <TimeSelector
-              title="강의 불가능한 시간 설정"
-              timeType="offTimes"
-              professor={professor}
-              index={index}
-              weekdays={weekdays}
-              periodLabels={periodLabels}
-              onToggleCell={onToggleCell}
-              onToggleAllDay={onToggleAllDay}
+            <Controller
+              control={control}
+              name={`professors.${index}.offTimes`}
+              render={({ field }) => (
+                <TimeSelector
+                  {...field}
+                  title="강의 불가능한 시간 설정"
+                  timeType="offTimes"
+                  name={`professors.${index}.offTimes`} // 폼 필드 이름 지정
+                  weekdays={weekdays}
+                  periodLabels={periodLabels}
+                  value={field.value || {}}
+                  onChange={(newValue) => field.onChange(newValue)}
+                />
+              )}
             />
-            <TimeSelector
-              title="선호 시간 설정"
-              timeType="hopeTimes"
-              professor={professor}
-              index={index}
-              weekdays={weekdays}
-              periodLabels={periodLabels}
-              onToggleCell={onToggleCell}
-              onToggleAllDay={onToggleAllDay}
+            <Controller
+              control={control}
+              name={`professors.${index}.hopeTimes`}
+              render={({ field }) => (
+                <TimeSelector
+                  {...field}
+                  title="선호 시간 설정"
+                  timeType="hopeTimes"
+                  name={`professors.${index}.hopeTimes`} // 폼 필드 이름 지정
+                  weekdays={weekdays}
+                  periodLabels={periodLabels}
+                  value={field.value || {}}
+                  onChange={(newValue) => field.onChange(newValue)}
+                />
+              )}
             />
           </div>
         </div>
       ))}
-      <Button onClick={addProfessor} style="max-w-32">
+      <Button onClick={handleAddProfessor} style="max-w-32">
         전임교원 추가
       </Button>
     </Form>

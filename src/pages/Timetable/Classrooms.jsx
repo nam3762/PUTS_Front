@@ -53,9 +53,20 @@ export default function Classrooms() {
       {classrooms.map((classroom, index) => (
         <div key={index} className="mb-4 p-4 rounded border-2 border-base-300">
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <kbd className="kbd kbd-sm col-span-3 max-w-28 font-sans font-semibold bg-base-content text-base-200 max-h-1 px-4 mt-2">
+            <kbd className="kbd kbd-sm col-span-2 max-w-28 font-sans font-semibold bg-base-content text-base-200 max-h-1 px-4 mt-2">
               {index + 1}번 강의실
             </kbd>
+            <div className="flex justify-end">
+              {" "}
+              {classrooms.length > 1 && (
+                <Button
+                  onClick={(event) => removeClassroom(event, index)}
+                  style="btn-error btn-sm mb-0"
+                >
+                  강의실 삭제
+                </Button>
+              )}
+            </div>
             <InputText
               index={index}
               name="buildingName"
@@ -78,14 +89,6 @@ export default function Classrooms() {
               수용 인원 (ex: 60)
             </InputText>
           </div>
-          {classrooms.length > 1 && (
-            <Button
-              onClick={(event) => removeClassroom(event, index)}
-              style="btn-error btn-sm mt-4 mb-0"
-            >
-              강의실 삭제
-            </Button>
-          )}
         </div>
       ))}
       <Button onClick={addClassroom} style="">

@@ -6,18 +6,59 @@ export const FormContext = createContext();
 export const FormProvider = ({ children }) => {
   const [formData, setFormData] = useState({
     timetableName: "",
+    password: "",
     timetableDescription: "",
-    professorName: "",
-    offDays: [],
-    buildingName: "",
-    classroomID: "",
-    groupName: "",
-    groupDescription: "",
+
+    professors: [
+      {
+        professorName: "",
+        professorCode: "",
+        isProfessor: true,
+        offTimes: [],
+        hopeTimes: [],
+      },
+    ],
+
+    classrooms: [{ buildingName: "", classroomNumber: "", capacity: null }],
+
+    classroomGroups: [
+      {
+        groupId: null,
+        groupName: "",
+      },
+    ],
+
     lectures: [
       {
         lectureName: "",
-        lectureTime: "",
-        sections: [{ division: "", enrollment: "", sectionTime: "" }],
+        lectureCode: "",
+        year: "",
+        group: "",
+        divisionGroup: [
+          {
+            divisionName: "",
+            sectionGroup: { sectionName: "", sectionTime: null },
+            capacity: null,
+            professor: "",
+          },
+        ],
+      },
+    ],
+
+    postgraduateLectures: [
+      {
+        graduateLectureName: "",
+        graduateLectureCode: "",
+        graduateYear: "",
+        graduateClassrooms: [],
+        graduateDivisionGroup: [
+          {
+            divisionName: "",
+            sectionGroup: { sectionName: "", sectionTime: null },
+            capacity: null,
+            professor: "",
+          },
+        ],
       },
     ],
   });

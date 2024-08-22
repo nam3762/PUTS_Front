@@ -2,7 +2,11 @@
 
 export default function Button({ onClick, style = "", children }) {
   return (
-    <button onClick={onClick} className={`btn mb-4 max-w-28 ${style}`}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`btn mb-4 max-w-28 ${style}`}
+    >
       {children}
     </button>
   );
