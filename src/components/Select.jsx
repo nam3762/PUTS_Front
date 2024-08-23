@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-const Select = forwardRef(function ({ style, children, options }, ref) {
+const Select = forwardRef(function ({ style, children, options = [] }, ref) {
   return (
     <select
       className={`select ${style} w-full max-w-xs text-base-content mt-2`}

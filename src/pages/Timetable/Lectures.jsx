@@ -1,97 +1,27 @@
-import { useState } from "react";
 import Button from "../../components/Button";
 import Form from "../../components/form/Form";
 import InputText from "../../components/form/InputText";
 import Toggle from "../../components/Toggle";
 import Select from "../../components/Select";
-import { useFormContext, useFieldArray, Controller } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import DivisionGroup from "./Lectures/DivisionGroup";
+import { useLecture } from "../../hooks/useLecture";
 
 export default function Lectures() {
-  const { control, register, watch, getValues } = useFormContext();
-  const {
-    fields: lectureFields,
-    append: appendLecture,
-    remove: removeLecture,
-  } = useFieldArray({
-    control,
-    name: "lectures",
-  });
-
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const { control, register, watch } = useFormContext();
+  const [
+    lectureFields,
+    currentIndex,
+    classroomGroupOptions,
+    handleAddLecture,
+    handleRemoveLecture,
+    handleFirst,
+    handleLast,
+    handlePageChange,
+    getVisiblePages,
+  ] = useLecture();
 
   const lectures = watch("lectures");
-  const classroomGroups = getValues("classroomGroups");
-
-  const classroomGroupOptions = classroomGroups.map((classroomGroup) => ({
-    value: classroomGroup.groupName,
-    label: classroomGroup.groupName,
-  }));
-
-  function handleAddLecture() {
-    appendLecture({
-      lectureName: "",
-      lectureCode: "",
-      year: "",
-      group: "",
-      majorRequired: false,
-      isGrad: false,
-      gradClassrooms: [],
-      divisionGroup: [
-        {
-          divisionName: "",
-          sectionGroup: [],
-          capacity: null,
-          professor: "",
-        },
-      ],
-    });
-    setCurrentIndex(lectureFields.length); // 새 강의를 추가한 후 해당 강의로 이동
-  }
-
-  function handleRemoveLecture(event, index) {
-    event.stopPropagation();
-    removeLecture(index);
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0)); // 현재 인덱스 재조정
-  }
-
-  const handleFirst = (event) => {
-    event.preventDefault();
-    setCurrentIndex(0);
-  };
-
-  const handleLast = (event) => {
-    event.preventDefault();
-    setCurrentIndex(lectures.length - 1);
-  };
-
-  const handlePageChange = (index) => {
-    setCurrentIndex(index);
-  };
-
-  const getVisiblePages = () => {
-    const totalLectures = lectures.length;
-    const visiblePages = [];
-
-    if (totalLectures <= 5) {
-      for (let i = 0; i < totalLectures; i++) {
-        visiblePages.push(i);
-      }
-    } else {
-      let start = Math.max(currentIndex - 2, 0);
-      let end = Math.min(start + 4, totalLectures - 1);
-
-      if (end - start < 4) {
-        start = Math.max(end - 4, 0);
-      }
-
-      for (let i = start; i <= end; i++) {
-        visiblePages.push(i);
-      }
-    }
-
-    return visiblePages;
-  };
 
   return (
     <Form
@@ -153,7 +83,13 @@ export default function Lectures() {
           <DivisionGroup control={control} currentIndex={currentIndex} />
 
           <div>
-            <Button onClick={handleAddLecture}>강의 추가</Button>
+            <Button
+              onClick={() => {
+                handleAddLecture(false);
+              }}
+            >
+              강의 추가
+            </Button>
             <div className="flex justify-center items-center space-x-2 -mt-8">
               <Button
                 onClick={handleFirst}
