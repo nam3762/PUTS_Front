@@ -5,10 +5,7 @@ import { useFormContext } from "react-hook-form";
 
 // 사용자 입력 첫 화면 (STEP 1: 시간표 정보 입력)
 export default function TimetableGenerator() {
-  const { register, getValues } = useFormContext();
-  // console.log(getValues("timetableName"));
-  // console.log(getValues("timetableDescription"));
-  // console.log(getValues("password"));
+  const { register } = useFormContext();
 
   return (
     <Form
@@ -27,10 +24,7 @@ export default function TimetableGenerator() {
         <span className="label-text text-base-content font-bold">
           시간표 이름
         </span>
-        <InputText
-          name="timetableName"
-          {...register("timetableName")}
-        ></InputText>
+        <InputText type="text" {...register("timetableName")}></InputText>
       </div>
       <div className="form-control mb-4">
         <div className="flex items-center">
@@ -58,12 +52,7 @@ export default function TimetableGenerator() {
               clipRule="evenodd"
             />
           </svg>
-          <input
-            type="password"
-            id="password"
-            className="grow"
-            {...register("password")}
-          />
+          <input className="grow" {...register("password")} />
         </label>
       </div>
       <div className="form-control mb-4">
@@ -73,7 +62,6 @@ export default function TimetableGenerator() {
           </span>
         </label>
         <textarea
-          id="timetableDescription"
           className="textarea textarea-bordered text-base-content w-full"
           placeholder="시간표 설명을 적어주세요."
           {...register("timetableDescription")}

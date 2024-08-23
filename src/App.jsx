@@ -23,16 +23,89 @@ const defaultValues = {
     {
       professorName: "",
       professorCode: "",
-      isProfessor: true,
-      offTimes: [],
-      hopeTimes: [],
+      isProfessor: true, // 기본 값 true, true = 교수, false = 강사
+      offTimes: [{ day: "", period: "" }], // 배열 안에 객체가 존재 {day: "수요일", period: "1교시"}
+      hopeTimes: [{ day: "", period: "" }],
     },
   ],
-  classrooms: [{ buildingName: "", classroomNumber: "", capacity: null }],
+  classrooms: [
+    {
+      buildingName: "S4-1",
+      classroomNumber: "101",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "102",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "103",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "104",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "106",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "201",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "202",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "203",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "205",
+      capacity: 60,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "206",
+      capacity: 60,
+    },
+    {
+      buildingName: "E8-7",
+      classroomNumber: "101",
+      capacity: 100,
+    },
+    {
+      buildingName: "S4-1",
+      classroomNumber: "301",
+      capacity: 40,
+    },
+  ],
   classroomGroups: [
     {
-      groupId: null,
-      groupName: "",
+      groupName: "이론",
+      classrooms: [],
+    },
+    {
+      groupName: "실습",
+      classrooms: [],
+    },
+    {
+      groupName: "대형",
+      classrooms: [],
+    },
+    {
+      groupName: "기타",
+      classrooms: [],
     },
   ],
   lectures: [
@@ -41,28 +114,15 @@ const defaultValues = {
       lectureCode: "",
       year: "",
       group: "",
+      majorRequired: false,
+      isGrad: false, // 대학원 여부
+      gradClassrooms: [], // 대학원 강의실
       divisionGroup: [
         {
           divisionName: "",
-          sectionGroup: { sectionName: "", sectionTime: null },
+          sectionGroup: [],
           capacity: null,
-          professor: "",
-        },
-      ],
-    },
-  ],
-  postgraduateLectures: [
-    {
-      graduateLectureName: "",
-      graduateLectureCode: "",
-      graduateYear: "",
-      graduateClassrooms: [],
-      graduateDivisionGroup: [
-        {
-          divisionName: "",
-          sectionGroup: { sectionName: "", sectionTime: null },
-          capacity: null,
-          professor: "",
+          professor: "", // 교수 코드
         },
       ],
     },
@@ -71,12 +131,11 @@ const defaultValues = {
 
 function App() {
   const methods = useForm({ defaultValues });
-  const { control } = methods; // methods에서 control 객체를 가져옵니다.
 
   return (
     <BrowserRouter>
-      <StepProvider>
-        <FormProvider {...methods}>
+      <FormProvider {...methods}>
+        <StepProvider>
           <main className="flex items-center flex-col min-h-screen w-full font-sans">
             <Navbar />
             <div className="flex flex-row w-full bg-base-200">
@@ -142,8 +201,8 @@ function App() {
             </div>
             <Footer />
           </main>
-        </FormProvider>
-      </StepProvider>
+        </StepProvider>
+      </FormProvider>
     </BrowserRouter>
   );
 }

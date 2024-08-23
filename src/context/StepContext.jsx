@@ -1,4 +1,5 @@
 import { useState, createContext, useContext } from "react";
+import { useFormContext } from "react-hook-form";
 
 const StepContext = createContext();
 
@@ -12,6 +13,10 @@ export function StepProvider({ children }) {
   const handleMinusStep = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0)); // Prevents going below 0
   };
+
+  // 단순 로그 출력용 (없애도 됨)
+  const { getValues } = useFormContext();
+  console.log(getValues());
 
   return (
     <StepContext.Provider

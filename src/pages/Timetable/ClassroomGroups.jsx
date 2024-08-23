@@ -1,107 +1,46 @@
-import { useState } from "react";
 import Form from "../../components/form/Form";
+import { useFormContext, useFieldArray } from "react-hook-form";
 
 export default function ClassroomGroups() {
-  const classroomGroups = [
-    { groupId: 1, groupName: "이론", classrooms: [] },
-    { groupId: 2, groupName: "실습", classrooms: [] },
-    { groupId: 3, groupName: "대형", classrooms: [] },
-    { groupId: 4, groupName: "기타", classrooms: [] },
-  ];
+  const { control, register, getValues, watch, setValue } = useFormContext();
+  const { fields } = useFieldArray({
+    control,
+    name: "classroomGroups",
+  });
 
-  const classrooms = [
-    {
-      buildingName: "S4-1",
-      classroomNumber: "101",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "102",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "103",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "104",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "106",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "201",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "202",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "203",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "205",
-      capacity: 60,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "206",
-      capacity: 60,
-    },
-    {
-      buildingName: "E8-7",
-      classroomNumber: "101",
-      capacity: 100,
-    },
-    {
-      buildingName: "S4-1",
-      classroomNumber: "301",
-      capacity: 40,
-    },
-  ];
-
-  const [selectedClassrooms, setSelectedClassrooms] = useState([]);
+  const classroomGroups = watch("classroomGroups");
+  const classrooms = getValues("classrooms");
 
   function handleClassroomChange(groupIndex, classroomId, isChecked) {
-    setSelectedClassrooms((prev) => {
-      let updatedSelected = [...prev];
-      if (isChecked) {
-        // 해당 그룹에서 선택된 경우, 다른 그룹의 선택을 모두 제거
-        updatedSelected = updatedSelected.filter(
-          (item) => item.classroomId !== classroomId
-        );
-        // 해당 그룹에 추가
-        updatedSelected.push({ groupIndex, classroomId });
-      } else {
-        // 선택한 그룹에서 제거
-        updatedSelected = updatedSelected.filter(
-          (item) => item.classroomId !== classroomId
-        );
-      }
-      return updatedSelected;
-    });
+    setValue(
+      "classroomGroups",
+      classroomGroups.map((group, index) => {
+        if (index === groupIndex) {
+          // 현재 그룹에서 강의실 선택/해제
+          return {
+            ...group,
+            classrooms: isChecked
+              ? [...(group.classrooms || []), classroomId]
+              : (group.classrooms || []).filter((id) => id !== classroomId),
+          };
+        }
+        // 선택된 강의실이 다른 그룹에 포함된 경우 제거
+        return {
+          ...group,
+          classrooms: (group.classrooms || []).filter(
+            (id) => id !== classroomId
+          ),
+        };
+      })
+    );
   }
 
   const getClassroomState = (groupIndex, classroomId) => {
-    const isCheckedInGroup = selectedClassrooms.some(
-      (item) =>
-        item.classroomId === classroomId && item.groupIndex === groupIndex
-    );
-    const isSelectedInOtherGroups = selectedClassrooms.some(
-      (item) =>
-        item.classroomId === classroomId && item.groupIndex !== groupIndex
+    const isCheckedInGroup =
+      classroomGroups[groupIndex]?.classrooms?.includes(classroomId);
+    const isSelectedInOtherGroups = classroomGroups.some(
+      (group, index) =>
+        index !== groupIndex && group.classrooms?.includes(classroomId)
     );
 
     return { isCheckedInGroup, isSelectedInOtherGroups };
@@ -113,19 +52,15 @@ export default function ClassroomGroups() {
       prev="/timetable/classrooms"
       next="/timetable/lectures"
     >
-      {classroomGroups.map((group, groupIndex) => (
+      {fields.map((group, index) => (
         <div
-          key={group.groupId}
+          key={group.id}
           tabIndex={0}
-          className="collapse collapse-arrow mb-6 p-4 rounded border-2 border-base-300"
+          className="collapse collapse-arrow collapse-open mb-6 p-4 rounded border-2 border-base-300"
         >
-          <input
-            type="checkbox"
-            id={`accordion-${group.groupId}`}
-            className="peer appearance-none absolute"
-          />
+          <input type="checkbox" className="appearance-none absolute" />
           <label
-            htmlFor={`accordion-${group.groupId}`}
+            htmlFor="group.groupName"
             className="collapse-title col-span-2 btn bg-base-content text-base-200 rounded font-sans font-bold cursor-pointer"
           >
             {group.groupName} 강의실
@@ -133,26 +68,27 @@ export default function ClassroomGroups() {
           <div className="collapse-content px-0 peer-checked:block">
             <div className="form-control grid grid-cols-6 gap-x-20 mt-4">
               {classrooms.map((classroom) => {
-                // Classroom Id 선언 (ex: S4-1-101) 건물명+강의실번호
-                const classroomId = `${classroom.buildingName}-${classroom.classroomNumber}`;
+                const classroomId =
+                  classroom.buildingName + "-" + classroom.classroomNumber;
                 const { isCheckedInGroup, isSelectedInOtherGroups } =
-                  getClassroomState(groupIndex, classroomId);
-
+                  getClassroomState(index, classroomId);
                 return (
                   <label key={classroomId} className="cursor-pointer label">
                     <input
+                      {...register(`classroomGroups.${index}.classrooms`)}
                       type="checkbox"
+                      value={classroomId}
                       className={`checkbox checkbox-xs m-2 ${
                         isCheckedInGroup
-                          ? "checkbox-success" // 해당 그룹에서 선택된 경우 초록색
+                          ? "checkbox-success"
                           : isSelectedInOtherGroups
-                          ? "checkbox-error" // 다른 그룹에서 선택된 경우 빨간색
-                          : "checkbox-neutral" // 선택되지 않은 경우 기본 색상
+                          ? "checkbox-error"
+                          : "checkbox-neutral"
                       }`}
                       checked={isCheckedInGroup}
                       onChange={(e) =>
                         handleClassroomChange(
-                          groupIndex,
+                          index,
                           classroomId,
                           e.target.checked
                         )

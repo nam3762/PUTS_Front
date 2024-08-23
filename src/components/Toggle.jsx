@@ -1,6 +1,9 @@
 import { forwardRef } from "react";
 
-const Toggle = forwardRef(function ({ children, checked, onChange }, ref) {
+const Toggle = forwardRef(function (
+  { children, onChange, checked, ...props },
+  ref
+) {
   return (
     <div className="form-control rounded min-w-40">
       <label className="label cursor-pointer">
@@ -10,8 +13,10 @@ const Toggle = forwardRef(function ({ children, checked, onChange }, ref) {
         <input
           type="checkbox"
           className="toggle"
-          checked={checked}
           onChange={onChange}
+          checked={checked}
+          ref={ref}
+          {...props}
         />
       </label>
     </div>

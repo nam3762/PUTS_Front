@@ -1,7 +1,6 @@
 import Form from "../../components/form/Form";
 import Button from "../../components/Button";
 import Toggle from "../../components/Toggle";
-import Kbd from "../../components/Kbd";
 import TimeSelector from "../../components/TimeSelector";
 import InputText from "../../components/form/InputText";
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
@@ -11,14 +10,11 @@ const periodLabels = Array.from({ length: 9 }, (_, i) => `${i + 1}교시`);
 
 // STEP 2: 전임교원 정보 입력
 export default function Professors() {
-  const { control, register, getValues } = useFormContext();
+  const { control, register } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "professors",
   });
-
-  const currentProfessors = getValues("professors");
-  console.log(currentProfessors);
 
   const handleAddProfessor = () => {
     append({
@@ -43,7 +39,9 @@ export default function Professors() {
         >
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex flex-row justify-between items-center col-span-1 max-w-max">
-              <Kbd>{index + 1}번 전임교원</Kbd>
+              <kbd className="kbd kbd-sm min-w-28 font-sans font-semibold bg-base-content text-base-200">
+                {index + 1}번 전임교원
+              </kbd>
               <Controller
                 control={control}
                 name={`professors.${index}.isProfessor`}
@@ -58,24 +56,16 @@ export default function Professors() {
               {fields.length > 1 && (
                 <Button
                   onClick={() => remove(index)}
-                  style="btn-error btn-sm mb-0"
+                  style="btn-error btn-sm -mb-2"
                 >
                   전임교원 삭제
                 </Button>
               )}
             </div>
-            <InputText
-              index={index}
-              name="professorName"
-              {...register(`professors.${index}.professorName`)}
-            >
+            <InputText {...register(`professors.${index}.professorName`)}>
               전임교원 이름 (ex: 남재홍)
             </InputText>
-            <InputText
-              index={index}
-              name="professorCode"
-              {...register(`professors.${index}.professorCode`)}
-            >
+            <InputText {...register(`professors.${index}.professorCode`)}>
               전임교원 번호 (ex: P-001)
             </InputText>
           </div>
@@ -89,7 +79,7 @@ export default function Professors() {
                   {...field}
                   title="강의 불가능한 시간 설정"
                   timeType="offTimes"
-                  name={`professors.${index}.offTimes`} // 폼 필드 이름 지정
+                  name={`professors.${index}.offTimes`}
                   weekdays={weekdays}
                   periodLabels={periodLabels}
                   value={field.value || {}}
@@ -105,7 +95,7 @@ export default function Professors() {
                   {...field}
                   title="선호 시간 설정"
                   timeType="hopeTimes"
-                  name={`professors.${index}.hopeTimes`} // 폼 필드 이름 지정
+                  name={`professors.${index}.hopeTimes`}
                   weekdays={weekdays}
                   periodLabels={periodLabels}
                   value={field.value || {}}
