@@ -1,38 +1,18 @@
-import { useNavigate } from "react-router-dom";
-import { useStepState } from "../context/StepContext";
-
 // 사용자 입력 form에서 Prev, Next 버튼을 묶은 컴포넌트
-//  props: prev는 이전 페이지, next는 다음 페이지의 url, prevClick, nextClick은 현재 입력된 form data context로 업데이트
-export default function PrevNextButton({ prev, next }) {
-  // 여기서 Step을 handle하게끔 로직 작성
-  const { handlePlusStep, handleMinusStep, currentStep } = useStepState();
-  const navigate = useNavigate();
-
-  const handlePrevClick = () => {
-    handleMinusStep();
-    navigate(prev);
-  };
-
-  const handleNextClick = () => {
-    handlePlusStep();
-    navigate(next);
-  };
-
+export default function PrevNextButton({ onSubmitPrev, onSubmitNext }) {
   return (
     <div className="flex justify-between mt-4">
       <button
-        type="submit"
+        type="button" // submit 대신 button으로 변경
         className="btn btn-primary"
-        onClick={handlePrevClick}
-        // disabled={currentStep === 0}
+        onClick={onSubmitPrev} // 이전 버튼 클릭 시 실행
       >
         이전
       </button>
       <button
-        type="submit"
+        type="submit" // 다음 버튼은 form 제출을 유도
         className="btn btn-primary"
-        onClick={handleNextClick}
-        // disabled={currentStep === 8}
+        onClick={onSubmitNext} // 다음 버튼 클릭 시 유효성 검사 후 실행
       >
         다음
       </button>

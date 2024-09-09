@@ -27,7 +27,7 @@ export default function Steps() {
         <li className={`step ${currentStep >= 7 ? "step-primary" : ""}`}>
           커스터마이징
         </li>
-        <li className={`step ${currentStep === 8 ? "step-success" : ""}`}>
+        <li className={`step ${currentStep === 8 ? "step-primary" : ""}`}>
           저장
         </li>
       </ul>

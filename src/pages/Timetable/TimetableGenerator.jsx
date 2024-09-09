@@ -5,15 +5,13 @@ import { useFormContext } from "react-hook-form";
 
 // 사용자 입력 첫 화면 (STEP 1: 시간표 정보 입력)
 export default function TimetableGenerator() {
-  const { register } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   return (
-    <Form
-      title="
-      STEP 1: 시간표 정보"
-      prev="/"
-      next="/timetable/professors"
-    >
+    <Form title="STEP 1: 시간표 정보" prev="/" next="/timetable/professors">
       <div className="form-control mb-4">
         <span className="my-2 label-text text-right text-xs text-green-500 font-bold">
           모든 정보는 서버에 저장되며 언제든 불러올 수 있습니다.
@@ -24,7 +22,21 @@ export default function TimetableGenerator() {
         <span className="label-text text-base-content font-bold">
           시간표 이름
         </span>
-        <InputText type="text" {...register("timetableName")}></InputText>
+        <InputText
+          type="text"
+          {...register("timetableName", {
+            required: "시간표 이름을 입력해주세요.", // 필수 항목으로 설정
+            minLength: {
+              value: 3,
+              message: "시간표 이름은 최소 3글자 이상이어야 합니다.",
+            },
+          })}
+        />
+        {errors.timetableName && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.timetableName.message}
+          </p>
+        )}
       </div>
       <div className="form-control mb-4">
         <div className="flex items-center">
@@ -52,8 +64,21 @@ export default function TimetableGenerator() {
               clipRule="evenodd"
             />
           </svg>
-          <input className="grow" {...register("password")} />
+          <input
+            className="grow"
+            type="password"
+            {...register("password", {
+              required: "비밀번호를 입력해주세요.", // 필수 항목으로 설정
+              minLength: {
+                value: 6,
+                message: "비밀번호는 최소 6글자 이상이어야 합니다.",
+              },
+            })}
+          />
         </label>
+        {errors.password && (
+          <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+        )}
       </div>
       <div className="form-control mb-4">
         <label className="label" htmlFor="Description">
@@ -64,8 +89,19 @@ export default function TimetableGenerator() {
         <textarea
           className="textarea textarea-bordered text-base-content w-full"
           placeholder="시간표 설명을 적어주세요."
-          {...register("timetableDescription")}
+          {...register("timetableDescription", {
+            required: "시간표 설명을 입력해주세요.", // 필수 항목으로 설정
+            maxLength: {
+              value: 500,
+              message: "시간표 설명은 최대 500자까지 가능합니다.",
+            },
+          })}
         ></textarea>
+        {errors.timetableDescription && (
+          <p className="text-red-500 text-xs mt-1">
+            {errors.timetableDescription.message}
+          </p>
+        )}
       </div>
     </Form>
   );

@@ -28,83 +28,105 @@ const defaultValues = {
       hopeTimes: [{ day: "", period: "" }],
     },
   ],
+
   classrooms: [
     {
       buildingName: "S4-1",
       classroomNumber: "101",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "102",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "103",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "104",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "106",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "201",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "202",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "203",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "205",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "206",
       capacity: 60,
+      usage: 1,
     },
     {
       buildingName: "E8-7",
       classroomNumber: "101",
       capacity: 100,
+      usage: 1,
     },
     {
       buildingName: "S4-1",
       classroomNumber: "301",
       capacity: 40,
+      usage: 1,
     },
   ],
   classroomGroups: [
     {
+      id: 0,
       groupName: "이론",
       classrooms: [],
     },
     {
+      id: 1,
       groupName: "실습",
       classrooms: [],
     },
     {
+      id: 2,
       groupName: "대형",
       classrooms: [],
     },
     {
+      id: 3,
       groupName: "기타",
+      classrooms: [],
+    },
+    {
+      id: 4,
+      groupName: "상관 없음",
       classrooms: [],
     },
   ],

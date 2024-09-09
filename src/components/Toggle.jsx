@@ -12,7 +12,7 @@ const Toggle = forwardRef(function (
         </span>
         <input
           type="checkbox"
-          className="toggle"
+          className="toggle toggle-primary"
           onChange={onChange}
           checked={checked}
           ref={ref}

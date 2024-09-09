@@ -8,7 +8,12 @@ import DivisionGroup from "./Lectures/DivisionGroup";
 import { useLecture } from "../../hooks/useLecture";
 
 export default function Lectures() {
-  const { control, register, watch } = useFormContext();
+  const {
+    control,
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext();
   const [
     lectureFields,
     currentIndex,
@@ -62,23 +67,80 @@ export default function Lectures() {
                 </Button>
               )}
             </div>
-            <InputText {...register(`lectures.${currentIndex}.lectureName`)}>
-              교과목명 (ex: 자료구조)
-            </InputText>
-            <InputText {...register(`lectures.${currentIndex}.lectureCode`)}>
-              교과목 코드 (ex: SW-001)
-            </InputText>
-            <InputText {...register(`lectures.${currentIndex}.year`)}>
-              학년 (ex: 2)
-            </InputText>
-            <Select
-              style="select-bordered"
-              {...register(`lectures.${currentIndex}.group`)}
-              options={classroomGroupOptions}
-            >
-              강의실 그룹 선택
-            </Select>
+
+            {/* 교과목명 */}
+            <div className="w-full mb-4">
+              <InputText
+                {...register(`lectures.${currentIndex}.lectureName`, {
+                  required: "교과목명을 입력해주세요.",
+                })}
+              >
+                교과목명 (ex: 자료구조)
+              </InputText>
+              {errors?.lectures?.[currentIndex]?.lectureName && (
+                <p className="text-red-500 text-xs mt-1 ml-1">
+                  {errors.lectures[currentIndex].lectureName.message}
+                </p>
+              )}
+            </div>
+
+            {/* 교과목 코드 */}
+            <div className="w-full mb-4">
+              <InputText
+                {...register(`lectures.${currentIndex}.lectureCode`, {
+                  required: "교과목 코드를 입력해주세요.",
+                })}
+              >
+                교과목 코드 (ex: SW-001)
+              </InputText>
+              {errors?.lectures?.[currentIndex]?.lectureCode && (
+                <p className="text-red-500 text-xs mt-1 ml-1">
+                  {errors.lectures[currentIndex].lectureCode.message}
+                </p>
+              )}
+            </div>
+
+            {/* 학년 */}
+            <div className="w-full mb-4">
+              <InputText
+                {...register(`lectures.${currentIndex}.year`, {
+                  required: "학년을 입력해주세요.",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "숫자만 입력해주세요.",
+                  },
+                })}
+              >
+                학년 (ex: 2)
+              </InputText>
+              {errors?.lectures?.[currentIndex]?.year && (
+                <p className="text-red-500 text-xs mt-1 ml-1">
+                  {errors.lectures[currentIndex].year.message}
+                </p>
+              )}
+            </div>
+
+            {/* 강의실 그룹 선택 */}
+            <div className="w-full mb-4">
+              <Select
+                style="select-bordered"
+                {...register(`lectures.${currentIndex}.group`, {
+                  required: "강의실 그룹을 선택해주세요.",
+                  validate: (value) =>
+                    value !== "" || "강의실 그룹을 선택해주세요.", // 값이 비어있으면 유효성 검사 실패
+                })}
+                options={classroomGroupOptions}
+              >
+                강의실 그룹 선택
+              </Select>
+              {errors?.lectures?.[currentIndex]?.group && (
+                <p className="text-red-500 text-xs mt-1 ml-1">
+                  {errors.lectures[currentIndex].group.message}
+                </p>
+              )}
+            </div>
           </div>
+
           {/* 분반 컴포넌트 */}
           <DivisionGroup control={control} currentIndex={currentIndex} />
 

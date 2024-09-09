@@ -1,12 +1,17 @@
 import { forwardRef } from "react";
 
-const Select = forwardRef(function ({ style, children, options = [] }, ref) {
+const Select = forwardRef(function (
+  { style, children, options = [], onChange, ...rest },
+  ref
+) {
   return (
     <select
-      className={`select ${style} w-full max-w-xs text-base-content mt-2`}
+      className={`select w-full max-w-xs text-base-content mt-2 ${style}`}
       ref={ref}
+      onChange={onChange}
+      {...rest} // 나머지 props (register의 기능을 받을 수 있게)
     >
-      <option disabled value="">
+      <option value="" disabled>
         {children}
       </option>
       {options.map((option) => (
