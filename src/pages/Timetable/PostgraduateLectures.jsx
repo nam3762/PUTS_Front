@@ -14,26 +14,40 @@ export default function PostgraduateLectures() {
     formState: { errors },
     watch,
   } = useFormContext();
+
   const [
     lectureFields,
     currentIndex,
     classroomGroupOptions,
     handleAddLecture,
     handleRemoveLecture,
-    handleFirst,
-    handleLast,
-    handlePageChange,
-    getVisiblePages,
+    handlePageChange, // 드롭다운에서 선택된 강의를 변경하는 함수
   ] = useLecture();
 
   const lectures = watch("lectures");
+
+  // 강의 드롭다운 선택 옵션 생성
+  const lectureOptions = lectureFields.map((lecture, index) => ({
+    value: index,
+    label: `강의 ${index + 1}: ${lecture.lectureName || "이름 없음"}`,
+  }));
 
   return (
     <Form
       title="STEP 6: 대학원 강의 정보"
       prev="/timetable/lectures"
-      next="/timetable/lectures"
+      next="/timetable/timetablecustomizing"
     >
+      {/* 드롭다운을 이용한 강의 선택 */}
+      <Select
+        style="select-bordered mt-0 mb-4"
+        options={lectureOptions}
+        onChange={(e) => handlePageChange(parseInt(e.target.value, 10))}
+        value={currentIndex}
+      >
+        강의 선택
+      </Select>
+
       {lectureFields.length > 0 && (
         <div
           key={lectureFields[currentIndex]?.id}
@@ -46,7 +60,7 @@ export default function PostgraduateLectures() {
               </kbd>
               <Controller
                 control={control}
-                name={`lectures.${currentIndex}.majorRequired`}
+                name={`lectures.${currentIndex}.atNight`}
                 render={({ field }) => (
                   <Toggle checked={field.value} onChange={field.onChange}>
                     야간 강의 여부 체크 (로직 구현 X)
@@ -142,40 +156,7 @@ export default function PostgraduateLectures() {
           <DivisionGroup control={control} currentIndex={currentIndex} />
 
           <div>
-            <Button
-              onClick={() => {
-                handleAddLecture(true);
-              }}
-            >
-              강의 추가
-            </Button>
-            <div className="flex justify-center items-center space-x-2 -mt-8">
-              <Button
-                onClick={handleFirst}
-                style="btn-neutral btn-circle btn-xs text-xs"
-              >
-                {`<<`}
-              </Button>
-              <div className="join">
-                {getVisiblePages().map((index) => (
-                  <input
-                    key={index}
-                    className="join-item btn btn-square -mt-4"
-                    type="radio"
-                    name="options"
-                    aria-label={index + 1}
-                    checked={currentIndex === index}
-                    onChange={() => handlePageChange(index)}
-                  />
-                ))}
-              </div>
-              <Button
-                onClick={(event) => handleLast(event)}
-                style="btn-neutral btn-circle btn-xs text-xs"
-              >
-                {`>>`}
-              </Button>
-            </div>
+            <Button onClick={() => handleAddLecture(false)}>강의 추가</Button>
           </div>
         </div>
       )}

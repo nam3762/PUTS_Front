@@ -37,8 +37,6 @@ export default function Form({ title, prev, next, children }) {
         {children}
         <div className="mt-auto">
           <PrevNextButton
-            prev={prev}
-            next={next}
             onSubmitPrev={onSubmitPrev} // 이전 클릭 시 onSubmitPrev 호출
             onSubmitNext={handleSubmit(onSubmitNext)} // 다음 클릭 시 유효성 검사를 거친 후 onSubmitNext 호출
           />

@@ -30,6 +30,7 @@ export function useLecture() {
       group: "",
       majorRequired: false,
       isGrad: bool,
+      atNight: false,
       gradClassrooms: [],
       divisionGroup: [
         {
@@ -49,42 +50,8 @@ export function useLecture() {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0)); // 현재 인덱스 재조정
   }
 
-  const handleFirst = (event) => {
-    event.preventDefault();
-    setCurrentIndex(0);
-  };
-
-  const handleLast = (event) => {
-    event.preventDefault();
-    setCurrentIndex(lectures.length - 1);
-  };
-
   const handlePageChange = (index) => {
-    setCurrentIndex(index);
-  };
-
-  const getVisiblePages = () => {
-    const totalLectures = lectures.length;
-    const visiblePages = [];
-
-    if (totalLectures <= 5) {
-      for (let i = 0; i < totalLectures; i++) {
-        visiblePages.push(i);
-      }
-    } else {
-      let start = Math.max(currentIndex - 2, 0);
-      let end = Math.min(start + 4, totalLectures - 1);
-
-      if (end - start < 4) {
-        start = Math.max(end - 4, 0);
-      }
-
-      for (let i = start; i <= end; i++) {
-        visiblePages.push(i);
-      }
-    }
-
-    return visiblePages;
+    setCurrentIndex(index); // 드롭다운에서 선택된 인덱스 변경
   };
 
   return [
@@ -93,9 +60,6 @@ export function useLecture() {
     classroomGroupOptions,
     handleAddLecture,
     handleRemoveLecture,
-    handleFirst,
-    handleLast,
     handlePageChange,
-    getVisiblePages,
   ];
 }

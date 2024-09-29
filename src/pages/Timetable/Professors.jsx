@@ -15,7 +15,7 @@ export default function Professors() {
     control,
     register,
     formState: { errors },
-  } = useFormContext(); // formState에서 errors 추가
+  } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "professors",
@@ -45,6 +45,19 @@ export default function Professors() {
     setCurrentIndex(selectedIndex); // 드롭다운에서 선택한 전임교원으로 이동
   };
 
+  // 전임교원 삭제 처리 로직
+  const handleRemoveProfessor = () => {
+    const newFieldsLength = fields.length - 1;
+    remove(currentIndex); // 현재 선택된 전임교원 삭제
+
+    // 인덱스를 조정하여 마지막 교원 삭제 시 이전 교원으로 이동
+    if (currentIndex === newFieldsLength) {
+      setCurrentIndex(Math.max(currentIndex - 1, 0));
+    } else {
+      setCurrentIndex(currentIndex); // 중간 교원 삭제 시 현재 인덱스 유지
+    }
+  };
+
   return (
     <Form
       title="STEP 2: 전임교원 정보"
@@ -67,7 +80,7 @@ export default function Professors() {
           className="mb-4 p-4 rounded border-2 border-base-300"
         >
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex flex-row justify-between items-center col-span-1 max-w-max">
+            <div className="flex flex-row justify-between items-center col-span-1 max-w-max my-2">
               <kbd className="kbd kbd-sm min-w-28 font-sans font-semibold bg-base-content text-base-200">
                 {currentIndex + 1}번 전임교원
               </kbd>
@@ -84,7 +97,7 @@ export default function Professors() {
             <div className="flex justify-end">
               {fields.length > 1 && (
                 <Button
-                  onClick={() => remove(currentIndex)}
+                  onClick={handleRemoveProfessor} // 전임교원 삭제 버튼
                   style="btn-error btn-sm -mb-2"
                 >
                   전임교원 삭제

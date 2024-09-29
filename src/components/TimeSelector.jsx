@@ -4,25 +4,30 @@ const TimeSelector = forwardRef(function (
   { title, timeType, name, weekdays, periodLabels, value = [], onChange },
   ref
 ) {
+  // value가 배열인지 확인하고, 그렇지 않으면 빈 배열로 설정
+  const timeValues = Array.isArray(value) ? value : [];
+
   const toggleTime = (day, period) => {
-    const newValue = value.some((t) => t.day === day && t.period === period)
-      ? value.filter((t) => !(t.day === day && t.period === period))
-      : [...value, { day, period }];
+    const newValue = timeValues.some(
+      (t) => t.day === day && t.period === period
+    )
+      ? timeValues.filter((t) => !(t.day === day && t.period === period))
+      : [...timeValues, { day, period }];
     onChange(newValue);
   };
 
   const toggleAllDay = (day, checked) => {
     const newValue = checked
       ? [
-          ...value.filter((t) => t.day !== day),
+          ...timeValues.filter((t) => t.day !== day),
           ...periodLabels.map((period) => ({ day, period })),
         ]
-      : value.filter((t) => t.day !== day);
+      : timeValues.filter((t) => t.day !== day);
     onChange(newValue);
   };
 
   const isTimeSelected = (day, period) => {
-    return value.some((t) => t.day === day && t.period === period);
+    return timeValues.some((t) => t.day === day && t.period === period);
   };
 
   const isDayFullySelected = (day) => {

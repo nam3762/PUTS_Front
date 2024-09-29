@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import Button from "../../../components/Button";
 import InputText from "../../../components/form/InputText";
 import Select from "../../../components/Select";
@@ -21,23 +21,55 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
     name: `lectures.${currentIndex}.divisionGroup`,
   });
 
+  const [activeDivisionIndex, setActiveDivisionIndex] = useState(0); // 현재 선택된 분반 인덱스 상태
+
   const professors = getValues("professors");
 
-  // Convert professors array to options for Select component
+  // 교수 목록을 select 옵션으로 변환
   const professorOptions = professors.map((professor) => ({
     value: professor.professorCode,
     label: `${professor.professorName}-${professor.professorCode}`,
   }));
 
+  // 분반 삭제 시 로직: 삭제 후 다른 분반을 표시
+  function handleRemoveDivision(divisionIndex) {
+    removeDivision(divisionIndex);
+
+    // 분반 삭제 후 인덱스를 조정하는 로직
+    if (divisionFields.length === 1) {
+      // 분반이 하나밖에 없을 경우 삭제 후 인덱스를 0으로 유지
+      setActiveDivisionIndex(0);
+    } else if (divisionIndex === divisionFields.length - 1) {
+      // 마지막 분반을 삭제할 경우, 이전 분반으로 이동
+      setActiveDivisionIndex(divisionIndex - 1);
+    } else {
+      // 중간 분반을 삭제할 경우, 현재 인덱스를 유지
+      setActiveDivisionIndex(divisionIndex);
+    }
+  }
+
+  // 분반 추가 시 로직: 추가된 분반으로 자동 이동
+  function handleAddDivision() {
+    appendDivision({
+      divisionName: "",
+      sectionGroup: [],
+      capacity: null,
+      professor: "",
+    });
+    setActiveDivisionIndex(divisionFields.length); // 새 분반으로 자동 이동
+  }
+
+  // 선택된 인덱스의 분반만 표시
   return (
-    <>
-      {divisionFields.map((division, divisionIndex) => (
+    <div>
+      {/* 현재 선택된 분반만 표시 */}
+      {divisionFields.length > 0 && (
         <div
-          key={division.id}
+          key={divisionFields[activeDivisionIndex]?.id}
           className="grid grid-cols-5 gap-4 my-6 p-4 rounded border-2 border-base-300"
         >
           <kbd className="kbd kbd-sm max-w-40 min-w-40 font-sans font-semibold bg-base-content text-base-200 max-h-1 px-4 mt-2">
-            {currentIndex + 1}번 강의: {divisionIndex + 1}번 분반
+            {currentIndex + 1}번 강의: {activeDivisionIndex + 1}번 분반
           </kbd>
           <div className="flex items-end col-span-2">
             <Tooltip>
@@ -55,8 +87,8 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
           <div className="flex justify-end">
             {divisionFields.length > 1 && (
               <Button
-                style="btn-error btn-sm -mb-2"
-                onClick={() => removeDivision(divisionIndex)}
+                style="btn-error btn-sm -mb-6"
+                onClick={() => handleRemoveDivision(activeDivisionIndex)}
               >
                 분반 삭제
               </Button>
@@ -67,7 +99,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
           <div className="w-full mb-4">
             <InputText
               {...register(
-                `lectures.${currentIndex}.divisionGroup.${divisionIndex}.divisionName`,
+                `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.divisionName`,
                 {
                   required: "분반 구분을 입력해주세요.",
                 }
@@ -75,12 +107,14 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
             >
               분반 구분 (ex: 1 or A)
             </InputText>
-            {errors?.lectures?.[currentIndex]?.divisionGroup?.[divisionIndex]
-              ?.divisionName && (
+            {errors?.lectures?.[currentIndex]?.divisionGroup?.[
+              activeDivisionIndex
+            ]?.divisionName && (
               <p className="text-red-500 text-xs mt-1 ml-1">
                 {
-                  errors.lectures[currentIndex].divisionGroup[divisionIndex]
-                    .divisionName.message
+                  errors.lectures[currentIndex].divisionGroup[
+                    activeDivisionIndex
+                  ].divisionName.message
                 }
               </p>
             )}
@@ -91,7 +125,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
             <div className="w-full mb-4">
               <InputText
                 {...register(
-                  `lectures.${currentIndex}.divisionGroup.${divisionIndex}.sectionGroup.0.sectionTime`,
+                  `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.sectionGroup.0.sectionTime`,
                   {
                     required: "강의 시간을 입력해주세요.",
                   }
@@ -100,12 +134,14 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
               >
                 강의 시간 분리 (ex: 1)
               </InputText>
-              {errors?.lectures?.[currentIndex]?.divisionGroup?.[divisionIndex]
-                ?.sectionGroup?.[0]?.sectionTime && (
+              {errors?.lectures?.[currentIndex]?.divisionGroup?.[
+                activeDivisionIndex
+              ]?.sectionGroup?.[0]?.sectionTime && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
                   {
-                    errors.lectures[currentIndex].divisionGroup[divisionIndex]
-                      .sectionGroup[0].sectionTime.message
+                    errors.lectures[currentIndex].divisionGroup[
+                      activeDivisionIndex
+                    ].sectionGroup[0].sectionTime.message
                   }
                 </p>
               )}
@@ -114,7 +150,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
             <div className="w-full mb-4">
               <InputText
                 {...register(
-                  `lectures.${currentIndex}.divisionGroup.${divisionIndex}.sectionGroup.1.sectionTime`,
+                  `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.sectionGroup.1.sectionTime`,
                   {
                     required: "강의 시간을 입력해주세요.",
                   }
@@ -130,7 +166,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
           <div className="w-full mb-4">
             <InputText
               {...register(
-                `lectures.${currentIndex}.divisionGroup.${divisionIndex}.capacity`,
+                `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.capacity`,
                 {
                   required: "수강 인원을 입력해주세요.",
                   pattern: {
@@ -145,12 +181,14 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
             >
               수강 인원 (ex: 40)
             </InputText>
-            {errors?.lectures?.[currentIndex]?.divisionGroup?.[divisionIndex]
-              ?.capacity && (
+            {errors?.lectures?.[currentIndex]?.divisionGroup?.[
+              activeDivisionIndex
+            ]?.capacity && (
               <p className="text-red-500 text-xs mt-1 ml-1">
                 {
-                  errors.lectures[currentIndex].divisionGroup[divisionIndex]
-                    .capacity.message
+                  errors.lectures[currentIndex].divisionGroup[
+                    activeDivisionIndex
+                  ].capacity.message
                 }
               </p>
             )}
@@ -161,7 +199,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
             <Select
               style="select-bordered"
               {...register(
-                `lectures.${currentIndex}.divisionGroup.${divisionIndex}.professor`,
+                `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.professor`,
                 {
                   required: "전임교원을 선택해주세요.",
                   validate: (value) =>
@@ -172,33 +210,43 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
             >
               전임교원 선택
             </Select>
-            {errors?.lectures?.[currentIndex]?.divisionGroup?.[divisionIndex]
-              ?.professor && (
+            {errors?.lectures?.[currentIndex]?.divisionGroup?.[
+              activeDivisionIndex
+            ]?.professor && (
               <p className="text-red-500 text-xs mt-1 ml-1">
                 {
-                  errors.lectures[currentIndex].divisionGroup[divisionIndex]
-                    .professor.message
+                  errors.lectures[currentIndex].divisionGroup[
+                    activeDivisionIndex
+                  ].professor.message
                 }
               </p>
             )}
           </div>
 
-          <Button
-            style="mb-0"
-            onClick={() =>
-              appendDivision({
-                divisionName: "",
-                sectionGroup: [],
-                capacity: null,
-                professor: "",
-              })
-            }
-          >
+          {/* 분반 추가 버튼 */}
+          <Button style="mb-0" onClick={handleAddDivision}>
             분반 추가
           </Button>
+
+          {/* 분반 선택 버튼 및 분반 추가 버튼 */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex space-x-2">
+              {divisionFields.map((_, divisionIndex) => (
+                <Button
+                  key={divisionIndex}
+                  style={`btn-sm ${
+                    activeDivisionIndex === divisionIndex ? "btn-active" : ""
+                  }`}
+                  onClick={() => setActiveDivisionIndex(divisionIndex)}
+                >
+                  분반 {divisionIndex + 1}
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
-      ))}
-    </>
+      )}
+    </div>
   );
 });
 

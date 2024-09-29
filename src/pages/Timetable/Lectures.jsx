@@ -20,13 +20,16 @@ export default function Lectures() {
     classroomGroupOptions,
     handleAddLecture,
     handleRemoveLecture,
-    handleFirst,
-    handleLast,
-    handlePageChange,
-    getVisiblePages,
+    handlePageChange, // 드롭다운에서 선택된 강의를 변경하는 함수
   ] = useLecture();
 
   const lectures = watch("lectures");
+
+  // 강의 드롭다운 선택 옵션 생성
+  const lectureOptions = lectureFields.map((lecture, index) => ({
+    value: index,
+    label: `강의 ${index + 1}: ${lecture.lectureName || "이름 없음"}`,
+  }));
 
   return (
     <Form
@@ -37,13 +40,24 @@ export default function Lectures() {
       <span className="mb-2 -mt-6 label-text text-right text-xs text-base-content font-bold">
         대학원(야간) 강의 입력은 다음 STEP에서 진행합니다.
       </span>
+
+      {/* 드롭다운을 이용한 강의 선택 */}
+      <Select
+        style="select-bordered mt-0 mb-4"
+        options={lectureOptions}
+        onChange={(e) => handlePageChange(parseInt(e.target.value, 10))}
+        value={currentIndex}
+      >
+        강의 선택
+      </Select>
+
       {lectureFields.length > 0 && (
         <div
           key={lectureFields[currentIndex]?.id}
           className="mb-4 p-4 rounded border-2 border-base-content"
         >
           <div className="grid grid-cols-4 gap-4 mb-4">
-            <div className="flex flex-row justify-between items-center col-span-3 max-w-max">
+            <div className="flex flex-row justify-between items-center col-span-3 max-w-max my-2">
               <kbd className="kbd kbd-sm max-w-24 font-sans font-semibold bg-base-content text-base-200 max-h-1 px-4">
                 {currentIndex + 1}번 강의
               </kbd>
@@ -127,7 +141,7 @@ export default function Lectures() {
                 {...register(`lectures.${currentIndex}.group`, {
                   required: "강의실 그룹을 선택해주세요.",
                   validate: (value) =>
-                    value !== "" || "강의실 그룹을 선택해주세요.", // 값이 비어있으면 유효성 검사 실패
+                    value !== "" || "강의실 그룹을 선택해주세요.",
                 })}
                 options={classroomGroupOptions}
               >
@@ -145,40 +159,7 @@ export default function Lectures() {
           <DivisionGroup control={control} currentIndex={currentIndex} />
 
           <div>
-            <Button
-              onClick={() => {
-                handleAddLecture(false);
-              }}
-            >
-              강의 추가
-            </Button>
-            <div className="flex justify-center items-center space-x-2 -mt-8">
-              <Button
-                onClick={handleFirst}
-                style="btn-neutral btn-circle btn-xs text-xs"
-              >
-                {`<<`}
-              </Button>
-              <div className="join">
-                {getVisiblePages().map((index) => (
-                  <input
-                    key={index}
-                    className="join-item btn btn-square -mt-4"
-                    type="radio"
-                    name="options"
-                    aria-label={index + 1}
-                    checked={currentIndex === index}
-                    onChange={() => handlePageChange(index)}
-                  />
-                ))}
-              </div>
-              <Button
-                onClick={(event) => handleLast(event)}
-                style="btn-neutral btn-circle btn-xs text-xs"
-              >
-                {`>>`}
-              </Button>
-            </div>
+            <Button onClick={() => handleAddLecture(false)}>강의 추가</Button>
           </div>
         </div>
       )}

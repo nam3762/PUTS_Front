@@ -27,8 +27,6 @@ export default function Classrooms() {
     label: `${classroom.buildingName}-${classroom.classroomNumber}`,
   }));
 
-  console.log(classroomsOptions);
-
   const handleAddClassroom = () => {
     append({ buildingName: "", classroomNumber: "", capacity: null });
     setCurrentIndex(classroomFields.length);
@@ -45,6 +43,14 @@ export default function Classrooms() {
       prev="/timetable/professors"
       next="/timetable/classroomgroups"
     >
+      {/* 강의실 선택 및 추가 */}
+      <Select
+        style="select-bordered mt-0 mb-4"
+        options={classroomsOptions}
+        onChange={handleClassroomPage}
+      >
+        강의실 선택
+      </Select>
       {classroomFields.length > 0 && (
         <div
           key={classroomFields[currentIndex]?.id}
@@ -160,12 +166,6 @@ export default function Classrooms() {
         </div>
       )}
 
-      {/* 강의실 선택 및 추가 */}
-      <Select
-        style="select-bordered mt-0"
-        options={classroomsOptions}
-        onChange={handleClassroomPage}
-      ></Select>
       <Button onClick={handleAddClassroom} style="mt-4">
         강의실 추가
       </Button>
