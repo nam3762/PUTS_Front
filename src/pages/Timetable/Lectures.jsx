@@ -31,25 +31,28 @@ export default function Lectures() {
     label: `강의 ${index + 1}: ${lecture.lectureName || "이름 없음"}`,
   }));
 
+  const isGradForm = false;
+
   return (
     <Form
       title="STEP 5: 강의 정보"
       prev="/timetable/classroomgroups"
       next="/timetable/postgraduatelectures"
     >
-      <span className="mb-2 -mt-6 label-text text-right text-xs text-base-content font-bold">
-        대학원(야간) 강의 입력은 다음 STEP에서 진행합니다.
-      </span>
-
-      {/* 드롭다운을 이용한 강의 선택 */}
-      <Select
-        style="select-bordered mt-0 mb-4"
-        options={lectureOptions}
-        onChange={(e) => handlePageChange(parseInt(e.target.value, 10))}
-        value={currentIndex}
-      >
-        강의 선택
-      </Select>
+      <div className="flex justify-between">
+        {/* 드롭다운을 이용한 강의 선택 */}
+        <Select
+          style="select-bordered mt-0 mb-4"
+          options={lectureOptions}
+          onChange={(e) => handlePageChange(parseInt(e.target.value, 10))}
+          value={currentIndex}
+        >
+          강의 선택
+        </Select>
+        <span className="my-2 label-text text-right text-xs text-base-content font-bold">
+          대학원(야간) 강의 입력은 다음 STEP에서 진행합니다.
+        </span>
+      </div>
 
       {lectureFields.length > 0 && (
         <div
@@ -84,12 +87,15 @@ export default function Lectures() {
 
             {/* 교과목명 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                교과목명
+              </span>
               <InputText
                 {...register(`lectures.${currentIndex}.lectureName`, {
                   required: "교과목명을 입력해주세요.",
                 })}
               >
-                교과목명 (ex: 자료구조)
+                자료구조
               </InputText>
               {errors?.lectures?.[currentIndex]?.lectureName && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -100,12 +106,15 @@ export default function Lectures() {
 
             {/* 교과목 코드 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                교과목 코드
+              </span>
               <InputText
                 {...register(`lectures.${currentIndex}.lectureCode`, {
                   required: "교과목 코드를 입력해주세요.",
                 })}
               >
-                교과목 코드 (ex: SW-001)
+                SW-001
               </InputText>
               {errors?.lectures?.[currentIndex]?.lectureCode && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -116,6 +125,9 @@ export default function Lectures() {
 
             {/* 학년 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                학년
+              </span>
               <InputText
                 {...register(`lectures.${currentIndex}.year`, {
                   required: "학년을 입력해주세요.",
@@ -125,7 +137,7 @@ export default function Lectures() {
                   },
                 })}
               >
-                학년 (ex: 2)
+                2
               </InputText>
               {errors?.lectures?.[currentIndex]?.year && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -136,6 +148,9 @@ export default function Lectures() {
 
             {/* 강의실 그룹 선택 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                강의실 그룹
+              </span>
               <Select
                 style="select-bordered"
                 {...register(`lectures.${currentIndex}.group`, {
@@ -145,7 +160,7 @@ export default function Lectures() {
                 })}
                 options={classroomGroupOptions}
               >
-                강의실 그룹 선택
+                -
               </Select>
               {errors?.lectures?.[currentIndex]?.group && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -156,7 +171,11 @@ export default function Lectures() {
           </div>
 
           {/* 분반 컴포넌트 */}
-          <DivisionGroup control={control} currentIndex={currentIndex} />
+          <DivisionGroup
+            control={control}
+            currentIndex={currentIndex}
+            isGradForm={isGradForm}
+          />
 
           <div>
             <Button onClick={() => handleAddLecture(false)}>강의 추가</Button>

@@ -232,7 +232,7 @@ export default function SearchPage() {
   const handlePasswordSubmit = () => {
     if (passwordInput === selectedItem.password) {
       // 비밀번호가 맞으면 TimetableInfo 페이지로 이동하면서 state에 ID를 넘김
-      navigate("/timetable/timetableinfo", {
+      navigate("/timetableinfo", {
         state: { timetableId: selectedItem.id },
       });
     } else {
@@ -265,25 +265,33 @@ export default function SearchPage() {
         />
 
         {/* 목록 테이블 */}
-        <table className="table w-full">
+        <table className="table w-full text-center">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>이름</th>
-              <th>세부 정보</th>
+              <th className="border-b border-b-content">ID</th>
+              <th className="border-b border-b-content">이름</th>
+              <th className="border-b border-b-content">세부 정보</th>
             </tr>
           </thead>
           <tbody>
             {currentItems.map((item) => (
-              <tr key={item.id} className="text-accent-content">
-                <td>{item.id}</td>
-                <td>{item.timetableName}</td>
-                <td>
+              <tr key={item.id} className="text-base-content">
+                <td className="border-b border-b-content">{item.id}</td>
+                <td className="border-b border-b-content">
+                  {item.timetableName}
+                </td>
+                <td className="border-b border-b-content">
+                  <link
+                    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+                    rel="stylesheet"
+                  ></link>
                   <button
-                    className="btn btn-outline btn-primary"
+                    className="btn btn-ghost"
                     onClick={() => openModal(item)}
                   >
-                    보기
+                    <span class="material-icons" style={{ fontSize: "1.2rem" }}>
+                      lock
+                    </span>
                   </button>
                 </td>
               </tr>

@@ -2,6 +2,9 @@ export const defaultValues = {
   timetableName: "",
   password: "",
   timetableDescription: "",
+  timetableResult: 1,
+  timetableLunchTimeConstraint: true,
+  timetable4daysConstraint: true,
   professors: [
     {
       professorName: "",
@@ -124,9 +127,12 @@ export const defaultValues = {
       atNight: false, // 야간 여부
       gradClassrooms: [], // 대학원 강의실
       divisionGroup: [
+        // 분반 그룹
         {
           divisionName: "",
-          sectionGroup: [],
+          sectionGroup: [
+            // isFixed는 여기 있어야함
+          ],
           capacity: null,
           professor: "", // 교수 코드
         },

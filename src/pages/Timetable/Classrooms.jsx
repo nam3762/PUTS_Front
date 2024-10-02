@@ -110,12 +110,15 @@ export default function Classrooms() {
 
             {/* 건물 이름 필드 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                건물 이름
+              </span>
               <InputText
                 {...register(`classrooms.${currentIndex}.buildingName`, {
                   required: "건물 이름을 입력해주세요.",
                 })}
               >
-                건물 이름 (ex: S4-1)
+                S4-1
               </InputText>
               {errors?.classrooms?.[currentIndex]?.buildingName && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -126,12 +129,15 @@ export default function Classrooms() {
 
             {/* 강의실 번호 필드 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                강의실 번호
+              </span>
               <InputText
                 {...register(`classrooms.${currentIndex}.classroomNumber`, {
                   required: "강의실 번호를 입력해주세요.",
                 })}
               >
-                강의실 번호 (ex: 101)
+                101
               </InputText>
               {errors?.classrooms?.[currentIndex]?.classroomNumber && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -142,6 +148,9 @@ export default function Classrooms() {
 
             {/* 수용 인원 필드 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                수용 인원
+              </span>
               <InputText
                 {...register(`classrooms.${currentIndex}.capacity`, {
                   required: "수용 인원을 입력해주세요.",
@@ -154,7 +163,7 @@ export default function Classrooms() {
                     "수용 인원은 1 이상이어야 합니다.", // 최소 1 이상
                 })}
               >
-                수용 인원 (ex: 60)
+                60
               </InputText>
               {errors?.classrooms?.[currentIndex]?.capacity && (
                 <p className="text-red-500 text-xs mt-1 ml-1">

@@ -40,9 +40,9 @@ export default function TimetableInfo() {
 
   return (
     <div className="flex flex-col items-center mx-auto w-full max-w-4xl p-5">
+      <h1 className="text-base-content text-2xl font-bold mb-6">시간표 정보</h1>
       <div className="card w-full bg-base-100 shadow-xl mb-8 text-base-content">
         <div className="card-body">
-          <h2 className="card-title">시간표 정보</h2>
           <p>
             <span className="font-bold">ID:</span> {timetableId}
           </p>
@@ -53,9 +53,7 @@ export default function TimetableInfo() {
             <span className="font-bold">설명:</span> {timetableDescription}
           </p>
           <div className="card-actions justify-end mt-4">
-            <button className="btn btn-warning" onClick={handleEdit}>
-              수정
-            </button>
+            <button className="btn btn-success">다운로드</button>
             <button className="btn btn-error" onClick={openDeleteModal}>
               삭제
             </button>
@@ -65,7 +63,7 @@ export default function TimetableInfo() {
 
       <div className="card w-full bg-base-100 shadow-xl text-base-content">
         <div className="card-body">
-          <h2 className="card-title">입력에 대해 수정 / 시간표 재구성</h2>
+          <h2 className="card-title">입력 수정 / 시간표 재구성</h2>
           <p>입력된 정보를 수정하고 새로운 시간표를 만들 수 있습니다.</p>
           <div className="card-actions justify-end mt-4">
             <button className="btn btn-primary" onClick={handleRegenerate}>

@@ -32,6 +32,8 @@ export default function PostgraduateLectures() {
     label: `강의 ${index + 1}: ${lecture.lectureName || "이름 없음"}`,
   }));
 
+  const isGradForm = true;
+
   return (
     <Form
       title="STEP 6: 대학원 강의 정보"
@@ -55,7 +57,7 @@ export default function PostgraduateLectures() {
         >
           <div className="grid grid-cols-4 gap-4 mb-4">
             <div className="flex flex-row justify-between items-center col-span-3 max-w-max">
-              <kbd className="kbd kbd-sm max-w-24 font-sans font-semibold bg-base-content text-base-200 max-h-1 px-4">
+              <kbd className="kbd kbd-sm badge-warning max-w-24 font-sans font-semibold text-warning-content max-h-1 px-4">
                 {currentIndex + 1}번 강의
               </kbd>
               <Controller
@@ -81,12 +83,15 @@ export default function PostgraduateLectures() {
 
             {/* 교과목명 유효성 검사 추가 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                교과목명
+              </span>
               <InputText
                 {...register(`lectures.${currentIndex}.lectureName`, {
                   required: "교과목명을 입력해주세요.",
                 })}
               >
-                교과목명 (ex: 자료구조)
+                연구윤리 및 연구과제 I
               </InputText>
               {errors?.lectures?.[currentIndex]?.lectureName && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -97,12 +102,15 @@ export default function PostgraduateLectures() {
 
             {/* 교과목 코드 유효성 검사 추가 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                교과목 코드
+              </span>
               <InputText
                 {...register(`lectures.${currentIndex}.lectureCode`, {
                   required: "교과목 코드를 입력해주세요.",
                 })}
               >
-                교과목 코드 (ex: SW-001)
+                SW-002
               </InputText>
               {errors?.lectures?.[currentIndex]?.lectureCode && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -113,6 +121,9 @@ export default function PostgraduateLectures() {
 
             {/* 학년 유효성 검사 추가 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                학년
+              </span>
               <InputText
                 {...register(`lectures.${currentIndex}.year`, {
                   required: "학년을 입력해주세요.",
@@ -122,7 +133,7 @@ export default function PostgraduateLectures() {
                   },
                 })}
               >
-                학년 (ex: 2)
+                2
               </InputText>
               {errors?.lectures?.[currentIndex]?.year && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -133,6 +144,9 @@ export default function PostgraduateLectures() {
 
             {/* 강의실 그룹 선택 유효성 검사 추가 */}
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                강의실 그룹
+              </span>
               <Select
                 style="select-bordered"
                 {...register(`lectures.${currentIndex}.group`, {
@@ -142,7 +156,7 @@ export default function PostgraduateLectures() {
                 })}
                 options={classroomGroupOptions}
               >
-                강의실 그룹 선택
+                -
               </Select>
               {errors?.lectures?.[currentIndex]?.group && (
                 <p className="text-red-500 text-xs mt-1 ml-1">
@@ -153,7 +167,11 @@ export default function PostgraduateLectures() {
           </div>
 
           {/* 분반 컴포넌트 */}
-          <DivisionGroup control={control} currentIndex={currentIndex} />
+          <DivisionGroup
+            control={control}
+            currentIndex={currentIndex}
+            isGradForm={isGradForm}
+          />
 
           <div>
             <Button onClick={() => handleAddLecture(false)}>강의 추가</Button>

@@ -9,7 +9,7 @@ export default function Footer() {
         </Link>
       </nav>
       <aside>
-        <p>Copyright © 2024 - All right reserved by PUTS Company Ltd</p>
+        <p>Copyright © 2024 - All right reserved by CBNU - PUTS</p>
       </aside>
     </footer>
   );

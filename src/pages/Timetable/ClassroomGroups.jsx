@@ -56,7 +56,7 @@ export default function ClassroomGroups() {
         <div
           key={group.id}
           tabIndex={0}
-          className="collapse collapse-arrow collapse-open mb-6 p-4 rounded border-2 border-base-300"
+          className="collapse collapse-arrow collapse-open mt-2 mb-6 p-4 rounded border-2 border-base-300"
         >
           <input type="checkbox" className="appearance-none absolute" />
           <label

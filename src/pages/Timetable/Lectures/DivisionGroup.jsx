@@ -6,7 +6,10 @@ import Tooltip from "../../../components/Tooltip";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // DivisionGroup 컴포넌트
-const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
+const DivisionGroup = forwardRef(function (
+  { control, currentIndex, isGradForm },
+  ref
+) {
   const {
     register,
     getValues,
@@ -59,6 +62,15 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
     setActiveDivisionIndex(divisionFields.length); // 새 분반으로 자동 이동
   }
 
+  // kdb 컬러용
+  let kbdColor;
+
+  if (isGradForm == true) {
+    kbdColor = "badge-warning text-base-warning";
+  } else {
+    kbdColor = "bg-base-content text-base-200";
+  }
+
   // 선택된 인덱스의 분반만 표시
   return (
     <div>
@@ -68,7 +80,9 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
           key={divisionFields[activeDivisionIndex]?.id}
           className="grid grid-cols-5 gap-4 my-6 p-4 rounded border-2 border-base-300"
         >
-          <kbd className="kbd kbd-sm max-w-40 min-w-40 font-sans font-semibold bg-base-content text-base-200 max-h-1 px-4 mt-2">
+          <kbd
+            className={`kbd kbd-sm max-w-40 min-w-40 font-sans font-semibold ${kbdColor} max-h-1 px-4 mt-2`}
+          >
             {currentIndex + 1}번 강의: {activeDivisionIndex + 1}번 분반
           </kbd>
           <div className="flex items-end col-span-2">
@@ -97,6 +111,9 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
 
           {/* 분반 구분 */}
           <div className="w-full mb-4">
+            <span className="label-text text-base-content font-bold">
+              분반 이름
+            </span>
             <InputText
               {...register(
                 `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.divisionName`,
@@ -105,7 +122,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
                 }
               )}
             >
-              분반 구분 (ex: 1 or A)
+              1 or A
             </InputText>
             {errors?.lectures?.[currentIndex]?.divisionGroup?.[
               activeDivisionIndex
@@ -123,16 +140,22 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
           {/* 강의 시간 분리 */}
           <div className="grid grid-cols-2 col-span-2 gap-4 rounded">
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                강의 시간 분리 1
+              </span>
               <InputText
                 {...register(
                   `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.sectionGroup.0.sectionTime`,
                   {
                     required: "강의 시간을 입력해주세요.",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "숫자만 입력해주세요.",
+                    },
                   }
                 )}
-                style="text-sm input-primary"
               >
-                강의 시간 분리 (ex: 1)
+                1
               </InputText>
               {errors?.lectures?.[currentIndex]?.divisionGroup?.[
                 activeDivisionIndex
@@ -148,22 +171,28 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
             </div>
 
             <div className="w-full mb-4">
+              <span className="label-text text-base-content font-bold">
+                강의 시간 분리 2
+              </span>
               <InputText
                 {...register(
                   `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.sectionGroup.1.sectionTime`,
                   {
-                    required: "강의 시간을 입력해주세요.",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "숫자만 입력해주세요.",
+                    },
                   }
                 )}
-                style="text-sm input-primary"
-              >
-                강의 시간 분리 (ex: 1)
-              </InputText>
+              ></InputText>
             </div>
           </div>
 
           {/* 수강 인원 */}
           <div className="w-full mb-4">
+            <span className="label-text text-base-content font-bold">
+              수강 인원
+            </span>
             <InputText
               {...register(
                 `lectures.${currentIndex}.divisionGroup.${activeDivisionIndex}.capacity`,
@@ -179,7 +208,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
                 }
               )}
             >
-              수강 인원 (ex: 40)
+              40
             </InputText>
             {errors?.lectures?.[currentIndex]?.divisionGroup?.[
               activeDivisionIndex
@@ -196,6 +225,9 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
 
           {/* 전임교원 선택 */}
           <div className="w-full mb-4">
+            <span className="label-text text-base-content font-bold">
+              전임교원 선택
+            </span>
             <Select
               style="select-bordered"
               {...register(
@@ -208,7 +240,7 @@ const DivisionGroup = forwardRef(function ({ control, currentIndex }, ref) {
               )}
               options={professorOptions}
             >
-              전임교원 선택
+              -
             </Select>
             {errors?.lectures?.[currentIndex]?.divisionGroup?.[
               activeDivisionIndex

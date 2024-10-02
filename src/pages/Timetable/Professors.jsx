@@ -107,12 +107,15 @@ export default function Professors() {
 
             {/* 전임교원 이름 입력 필드에 유효성 검사 추가 */}
             <div className="relative">
+              <span className="label-text text-base-content font-bold">
+                교수 이름
+              </span>
               <InputText
                 {...register(`professors.${currentIndex}.professorName`, {
                   required: "전임교원 이름을 입력해주세요.", // 필수 항목
                 })}
               >
-                전임교원 이름 (ex: 남재홍)
+                최경주
               </InputText>
               {errors?.professors?.[currentIndex]?.professorName && (
                 <p className="text-red-500 text-xs absolute -bottom-5 left-1">
@@ -123,12 +126,15 @@ export default function Professors() {
 
             {/* 전임교원 번호 입력 필드에 유효성 검사 추가 */}
             <div className="relative">
+              <span className="label-text text-base-content font-bold">
+                전임교원 번호
+              </span>
               <InputText
                 {...register(`professors.${currentIndex}.professorCode`, {
                   required: "전임교원 번호를 입력해주세요.", // 필수 항목
                 })}
               >
-                전임교원 번호 (ex: P-001)
+                P-001
               </InputText>
               {errors?.professors?.[currentIndex]?.professorCode && (
                 <p className="text-red-500 text-xs absolute -bottom-5 left-1">
