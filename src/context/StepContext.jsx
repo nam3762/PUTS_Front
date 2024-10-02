@@ -6,6 +6,10 @@ const StepContext = createContext();
 export function StepProvider({ children }) {
   const [currentStep, setCurrentStep] = useState(0);
 
+  const handleResetStep = () => {
+    setCurrentStep(1);
+  };
+
   const handlePlusStep = () => {
     setCurrentStep((prev) => prev + 1);
   };
@@ -20,7 +24,13 @@ export function StepProvider({ children }) {
 
   return (
     <StepContext.Provider
-      value={{ currentStep, setCurrentStep, handlePlusStep, handleMinusStep }}
+      value={{
+        currentStep,
+        setCurrentStep,
+        handlePlusStep,
+        handleMinusStep,
+        handleResetStep,
+      }}
     >
       {children}
     </StepContext.Provider>

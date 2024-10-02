@@ -3,7 +3,7 @@ import { useStepState } from "../context/StepContext";
 import putsLogo from "../assets/PUTS2.png";
 
 export default function Mainpage() {
-  const { handlePlusStep } = useStepState();
+  const { handleResetStep } = useStepState();
 
   return (
     <div className="flex flex-1 items-center justify-center bg-base-200 min-h-screen">
@@ -17,7 +17,7 @@ export default function Mainpage() {
           <Link
             to="/timetable"
             className="btn btn-primary"
-            onClick={handlePlusStep}
+            onClick={handleResetStep}
           >
             Get Started
           </Link>

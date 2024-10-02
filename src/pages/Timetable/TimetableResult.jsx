@@ -1,7 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import Form from "../../components/form/Form";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import usePreventBackNavigation from "../../hooks/usePreventBackNavigation";
+import { useFormContext } from "react-hook-form";
 
 export default function TimetableResult() {
+  const { watch } = useFormContext();
+
   const [counter, setCounter] = useState(60); // 초 단위로 설정
 
   useEffect(() => {
@@ -12,6 +17,19 @@ export default function TimetableResult() {
     // 컴포넌트가 언마운트될 때 interval 정리
     return () => clearInterval(interval);
   }, []);
+
+  // 새로 고침, 뒤로 가기, 앞으로 가기 시 홈화면으로
+  usePreventBackNavigation();
+
+  // STEP 1을 건너뛰고 온 사용자를 홈화면으로 리다이렉트
+  const navigate = useNavigate();
+  const timetableName = watch("timetableName"); // 이전 페이지에서 입력한 시간표 이름을 확인
+  useEffect(() => {
+    if (!timetableName) {
+      // 만약 이전 단계의 필수 값이 없으면 초기 화면으로 리다이렉트
+      navigate("/");
+    }
+  }, [timetableName, navigate]);
 
   return (
     <Form

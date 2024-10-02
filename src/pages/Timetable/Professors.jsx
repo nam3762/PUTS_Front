@@ -5,13 +5,16 @@ import TimeSelector from "../../components/TimeSelector";
 import InputText from "../../components/form/InputText";
 import Select from "../../components/Select";
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import usePreventBackNavigation from "../../hooks/usePreventBackNavigation";
 
 const weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일"];
 const periodLabels = Array.from({ length: 9 }, (_, i) => `${i + 1}교시`);
 
 export default function Professors() {
   const {
+    watch,
     control,
     register,
     formState: { errors },
@@ -57,6 +60,19 @@ export default function Professors() {
       setCurrentIndex(currentIndex); // 중간 교원 삭제 시 현재 인덱스 유지
     }
   };
+
+  // 새로 고침, 뒤로 가기, 앞으로 가기 시 홈화면으로
+  usePreventBackNavigation();
+
+  // STEP 1을 건너뛰고 온 사용자를 홈화면으로 리다이렉트
+  const navigate = useNavigate();
+  const timetableName = watch("timetableName"); // 이전 페이지에서 입력한 시간표 이름을 확인
+  useEffect(() => {
+    if (!timetableName) {
+      // 만약 이전 단계의 필수 값이 없으면 초기 화면으로 리다이렉트
+      navigate("/");
+    }
+  }, [timetableName, navigate]);
 
   return (
     <Form

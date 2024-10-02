@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "../../components/Button";
 import Form from "../../components/form/Form";
 import InputText from "../../components/form/InputText";
@@ -6,6 +7,8 @@ import Select from "../../components/Select";
 import { useFormContext, Controller } from "react-hook-form";
 import DivisionGroup from "./Lectures/DivisionGroup";
 import { useLecture } from "../../hooks/useLecture";
+import usePreventBackNavigation from "../../hooks/usePreventBackNavigation";
+import { useNavigate } from "react-router-dom";
 
 export default function PostgraduateLectures() {
   const {
@@ -32,7 +35,21 @@ export default function PostgraduateLectures() {
     label: `강의 ${index + 1}: ${lecture.lectureName || "이름 없음"}`,
   }));
 
+  // 대학원 강의 입력 여부 확인용
   const isGradForm = true;
+
+  // 새로 고침, 뒤로 가기, 앞으로 가기 시 홈화면으로
+  usePreventBackNavigation();
+
+  // STEP 1을 건너뛰고 온 사용자를 홈화면으로 리다이렉트
+  const navigate = useNavigate();
+  const timetableName = watch("timetableName"); // 이전 페이지에서 입력한 시간표 이름을 확인
+  useEffect(() => {
+    if (!timetableName) {
+      // 만약 이전 단계의 필수 값이 없으면 초기 화면으로 리다이렉트
+      navigate("/");
+    }
+  }, [timetableName, navigate]);
 
   return (
     <Form

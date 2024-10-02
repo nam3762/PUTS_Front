@@ -152,6 +152,14 @@ const DivisionGroup = forwardRef(function (
                       value: /^[0-9]+$/,
                       message: "숫자만 입력해주세요.",
                     },
+                    min: {
+                      value: 1,
+                      message: "1 이상의 숫자를 입력해주세요.",
+                    },
+                    max: {
+                      value: 13,
+                      message: "13 이하의 숫자를 입력해주세요.",
+                    },
                   }
                 )}
               >
@@ -181,6 +189,14 @@ const DivisionGroup = forwardRef(function (
                     pattern: {
                       value: /^[0-9]+$/,
                       message: "숫자만 입력해주세요.",
+                    },
+                    min: {
+                      value: 0,
+                      message: "0 이상의 숫자를 입력해주세요.",
+                    },
+                    max: {
+                      value: 13,
+                      message: "13 이하의 숫자를 입력해주세요.",
                     },
                   }
                 )}

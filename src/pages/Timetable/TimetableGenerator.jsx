@@ -2,6 +2,9 @@ import Form from "../../components/form/Form";
 import InputText from "../../components/form/InputText";
 import Tooltip from "../../components/Tooltip";
 import { useFormContext } from "react-hook-form";
+import usePreventBackNavigation from "../../hooks/usePreventBackNavigation";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // 사용자 입력 첫 화면 (STEP 1: 시간표 정보 입력)
 export default function TimetableGenerator() {
@@ -17,12 +20,48 @@ export default function TimetableGenerator() {
     </div>
   );
 
+  const navigate = useNavigate();
+
+  // STEP 1에서 새로고침 및 뒤로 가기 방지
+  usePreventBackNavigation();
+
+  // 새로고침 탐지 및 경고창 띄우기
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // 경고창을 띄워 새로고침 시 사용자에게 확인을 요청
+      const confirmationMessage =
+        "변경 사항이 저장되지 않을 수 있습니다. 계속하시겠습니까?";
+      event.preventDefault();
+      event.returnValue = confirmationMessage;
+      return confirmationMessage;
+    };
+
+    const handleUnload = () => {
+      // 새로고침을 감지한 경우 localStorage에 플래그 저장
+      localStorage.setItem("reloaded", "true");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
+
+    // 컴포넌트가 렌더링될 때 새로고침이 발생했는지 확인
+    if (localStorage.getItem("reloaded") === "true") {
+      localStorage.removeItem("reloaded");
+      navigate("/", { replace: true }); // 새로고침된 경우 홈으로 리다이렉트
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
+    };
+  }, [navigate]);
+
   return (
     <Form
       title="STEP 1: 시간표 정보"
       prev="/"
       next="/timetable/professors"
-      helpContent={helpContent} // 도움말 콘텐츠 전달
+      helpContent={helpContent}
     >
       <span className="my-2 label-text text-right text-xs text-green-500 font-bold">
         모든 정보는 서버에 저장되며 언제든 불러올 수 있습니다.
